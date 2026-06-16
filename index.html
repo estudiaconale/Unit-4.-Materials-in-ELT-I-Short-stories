@@ -1,0 +1,2458 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unit 4 Study Hub: Children's Literature & Storytelling</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Iconos Lucide para una interfaz accesible de alta fidelidad -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Estilos cognitivos adaptativos -->
+  <style>
+    :root {
+      --app-font-size: 16px;
+    }
+    body {
+      font-size: var(--app-font-size);
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    
+    /* Fuente amigable para personas con dislexia */
+    .dyslexic-mode, .dyslexic-mode * {
+      font-family: 'Comic Sans MS', 'Century Gothic', 'Andika', sans-serif !important;
+      letter-spacing: 0.12em !important;
+      word-spacing: 0.18em !important;
+      line-height: 1.8 !important;
+    }
+
+    /* Sobrescribir estilos para temas visuales accesibles */
+    /* Alto Contraste: Amarillo sobre Negro */
+    .theme-high-contrast {
+      background-color: #000000 !important;
+      color: #fef08a !important; /* Tailwind yellow-200 */
+    }
+    .theme-high-contrast .card-bg {
+      background-color: #111111 !important;
+      border: 2px solid #fef08a !important;
+      color: #fef08a !important;
+    }
+    .theme-high-contrast button {
+      border: 2px solid #fef08a !important;
+      background-color: #000000 !important;
+      color: #fef08a !important;
+    }
+    .theme-high-contrast button:hover {
+      background-color: #fef08a !important;
+      color: #000000 !important;
+    }
+    .theme-high-contrast input, .theme-high-contrast select {
+      background-color: #000000 !important;
+      color: #fef08a !important;
+      border: 2px solid #fef08a !important;
+    }
+
+    /* Tema de Bajo Estímulo y Enfoque Calmo (TDAH) */
+    .theme-pastel {
+      background-color: #f4f9f4 !important; /* Verde pastel orgánico */
+      color: #1b3a1b !important; /* Verde bosque oscuro */
+    }
+    .theme-pastel .card-bg {
+      background-color: #ffffff !important;
+      border: 1px solid #c2e0c2 !important;
+      color: #1b3a1b !important;
+      box-shadow: 0 4px 6px -1px rgba(194, 224, 194, 0.3) !important;
+    }
+    .theme-pastel button {
+      background-color: #e2f0e2 !important;
+      color: #1b3a1b !important;
+    }
+    .theme-pastel button:hover {
+      background-color: #c2e0c2 !important;
+    }
+
+    /* Efectos de volteado 3D para tarjetas de repaso */
+    .flashcard-inner {
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+    }
+    .flashcard-flipped {
+      transform: rotateY(180deg);
+    }
+    .flashcard-front, .flashcard-back {
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+    .flashcard-back {
+      transform: rotateY(180deg);
+    }
+
+    .interactive-element:focus-visible {
+      outline: 4px solid #4f46e5;
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col transition-all duration-200">
+
+  <!-- BARRA DE HERRAMIENTAS DE ACCESIBILIDAD COGNITIVA -->
+  <div id="accessibility-bar" class="bg-teal-900 text-white px-4 py-2 sticky top-0 z-50 shadow-md flex flex-wrap items-center justify-between gap-4">
+    <div class="flex items-center gap-3">
+      <i data-lucide="accessibility" class="w-6 h-6 text-teal-300"></i>
+      <span class="font-bold tracking-wide text-sm sm:text-base">Asistente de Estudio Accesible (Unit 4)</span>
+    </div>
+    
+    <div class="flex flex-wrap items-center gap-4 text-xs sm:text-sm">
+      <!-- Ajustar tamaño de texto -->
+      <div class="flex items-center gap-2">
+        <label for="font-size-adjust" class="font-semibold text-teal-200">Texto:</label>
+        <select id="font-size-adjust" onchange="adjustFontSize(this.value)" class="bg-teal-950 text-white rounded px-2 py-1 border border-teal-700 cursor-pointer focus:outline-none">
+          <option value="14px">Pequeño</option>
+          <option value="16px" selected>Normal</option>
+          <option value="20px">Grande</option>
+          <option value="24px">Muy Grande</option>
+        </select>
+      </div>
+
+      <!-- Selector de Tema visual -->
+      <div class="flex items-center gap-2">
+        <label for="theme-selector" class="font-semibold text-teal-200">Tema:</label>
+        <select id="theme-selector" onchange="changeTheme(this.value)" class="bg-teal-950 text-white rounded px-2 py-1 border border-teal-700 cursor-pointer focus:outline-none">
+          <option value="light">Luz Suave</option>
+          <option value="dark">Modo Oscuro</option>
+          <option value="high-contrast">Alto Contraste</option>
+          <option value="pastel">Calm TDAH (Verde)</option>
+        </select>
+      </div>
+
+      <!-- Activar fuente para Dislexia -->
+      <button onclick="toggleDyslexicFont()" class="flex items-center gap-1 bg-teal-800 hover:bg-teal-700 px-3 py-1 rounded border border-teal-600 transition-colors">
+        <i data-lucide="type" class="w-4 h-4"></i>
+        <span id="dyslexic-status">Dislexia: No</span>
+      </button>
+
+      <!-- Activar modo enfoque (oculta distractores laterales) -->
+      <button onclick="toggleFocusMode()" class="flex items-center gap-1 bg-teal-800 hover:bg-teal-700 px-3 py-1 rounded border border-teal-600 transition-colors">
+        <i data-lucide="eye-off" class="w-4 h-4"></i>
+        <span id="focus-status">Modo Enfoque: No</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- CONTENEDOR GENERAL -->
+  <div class="flex-1 flex flex-col md:flex-row">
+    
+    <!-- BARRA LATERAL NAVEGACIÓN -->
+    <aside id="app-sidebar" class="w-full md:w-64 bg-slate-900 text-slate-300 flex flex-col transition-all duration-300">
+      <div class="p-6 border-b border-slate-800">
+        <h1 class="text-xl font-extrabold text-white tracking-tight flex items-center gap-2">
+          <i data-lucide="graduation-cap" class="text-teal-400"></i>
+          <span>Syllabus Unit 4</span>
+        </h1>
+        <p class="text-xs text-slate-500 mt-1">Literature & Storytelling</p>
+      </div>
+
+      <nav class="flex-1 p-4 space-y-2">
+        <button onclick="switchTab('dashboard')" id="nav-dashboard" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all bg-slate-800 text-white font-semibold">
+          <i data-lucide="layout-dashboard"></i>
+          <span>Panel de Control</span>
+        </button>
+        <button onclick="switchTab('study')" id="nav-study" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all hover:bg-slate-800 hover:text-white">
+          <i data-lucide="book-open"></i>
+          <span>Lecturas de Estudio</span>
+        </button>
+        <button onclick="switchTab('flashcards')" id="nav-flashcards" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all hover:bg-slate-800 hover:text-white">
+          <i data-lucide="layers"></i>
+          <span>Tarjetas de Repaso</span>
+        </button>
+        <button onclick="switchTab('test')" id="nav-test" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-left transition-all hover:bg-slate-800 hover:text-white">
+          <i data-lucide="clipboard-check"></i>
+          <span>Exámenes Diagnósticos</span>
+        </button>
+      </nav>
+
+      <!-- BUSCADOR INTEGRADO -->
+      <div class="p-4 border-t border-slate-800">
+        <div class="relative">
+          <input type="text" id="global-search" oninput="handleGlobalSearch(this.value)" placeholder="Buscar término..." class="w-full bg-slate-800 text-slate-100 rounded-lg pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500">
+          <i data-lucide="search" class="w-4 h-4 text-slate-500 absolute left-3 top-3"></i>
+        </div>
+        <div id="search-results-popup" class="hidden mt-2 bg-slate-800 rounded-lg p-2 max-h-48 overflow-y-auto text-xs text-slate-300"></div>
+      </div>
+
+      <div class="p-4 border-t border-slate-800 text-center text-xs text-slate-500">
+        Basado estrictamente en Unidad 4
+      </div>
+    </aside>
+
+    <!-- ÁREA DE TRABAJO PRINCIPAL -->
+    <main class="flex-1 p-4 md:p-8 overflow-y-auto max-w-5xl mx-auto w-full transition-all duration-300">
+
+      <!-- ============================================ -->
+      <!-- SECCIÓN: PANEL DE CONTROL -->
+      <!-- ============================================ -->
+      <section id="tab-dashboard" class="space-y-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-3xl font-extrabold tracking-tight">Tu Hub de Aprendizaje Activo (Unidad 4)</h2>
+            <p class="text-slate-500">Mide tu progreso de lectura, domina las ventajas de los cuentos cortos (*short stories*) y las técnicas de narración de libros ilustrados (*storytelling*).</p>
+          </div>
+          <div class="bg-teal-50 border border-teal-100 rounded-xl p-3 flex items-center gap-3 card-bg">
+            <div class="bg-teal-600 text-white rounded-lg p-2">
+              <i data-lucide="sparkles" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <div class="text-xs text-slate-500">Unidad de Estudio</div>
+              <div class="font-bold text-sm">Unit 4: Children's Literature & ELT</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- REJILLA DE MÉTRICAS COGNITIVAS -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <!-- Progreso de silabo leído -->
+          <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-bg flex items-center justify-between">
+            <div>
+              <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Lectura del Programa</p>
+              <h3 class="text-2xl font-bold mt-1" id="dash-reading-progress">0%</h3>
+              <p class="text-xs text-slate-400 mt-1" id="dash-reading-detail">0 de 3 leídos</p>
+            </div>
+            <div class="text-emerald-500 bg-emerald-50 p-3 rounded-xl card-bg">
+              <i data-lucide="check-square" class="w-6 h-6"></i>
+            </div>
+          </div>
+
+          <!-- Tarjetas Dominadas -->
+          <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-bg flex items-center justify-between">
+            <div>
+              <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Tarjetas Retenidas</p>
+              <h3 class="text-2xl font-bold mt-1" id="dash-cards-progress">0%</h3>
+              <p class="text-xs text-slate-400 mt-1" id="dash-cards-detail">0 de 40 tarjetas</p>
+            </div>
+            <div class="text-teal-500 bg-teal-50 p-3 rounded-xl card-bg">
+              <i data-lucide="layers" class="w-6 h-6"></i>
+            </div>
+          </div>
+
+          <!-- Tests Completados -->
+          <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-bg flex items-center justify-between">
+            <div>
+              <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Pruebas Superadas</p>
+              <h3 class="text-2xl font-bold mt-1" id="dash-quizzes-completed">0 / 3</h3>
+              <p class="text-xs text-slate-400 mt-1">Dificultad progresiva</p>
+            </div>
+            <div class="text-purple-500 bg-purple-50 p-3 rounded-xl card-bg">
+              <i data-lucide="file-text" class="w-6 h-6"></i>
+            </div>
+          </div>
+
+          <!-- Precisión Promedio -->
+          <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-bg flex items-center justify-between">
+            <div>
+              <p class="text-xs font-semibold text-slate-500 uppercase tracking-wider">Rendimiento Medio</p>
+              <h3 class="text-2xl font-bold mt-1" id="dash-average-score">0%</h3>
+              <p class="text-xs text-slate-400 mt-1">De quizzes hechos</p>
+            </div>
+            <div class="text-amber-500 bg-amber-50 p-3 rounded-xl card-bg">
+              <i data-lucide="trending-up" class="w-6 h-6"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- BARRA INTEGRAL DE PROGRESO GLOBAL -->
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 card-bg">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-bold text-lg">Porcentaje de Maestría del Silabo</h3>
+            <span class="text-sm font-semibold text-teal-600" id="dash-total-percentage">0% Completado</span>
+          </div>
+          <div class="w-full bg-slate-100 rounded-full h-4 overflow-hidden card-bg">
+            <div id="dash-total-progressbar" class="bg-teal-600 h-full rounded-full transition-all duration-500" style="width: 0%"></div>
+          </div>
+          <p class="text-xs text-slate-400 mt-2">La maestría global se calcula ponderando las lecturas revisadas (30%), memorización activa de tarjetas (30%) y efectividad de evaluaciones (40%).</p>
+        </div>
+
+        <!-- RECOMENDACIÓN PEDAGÓGICA -->
+        <div class="bg-gradient-to-r from-teal-600 to-emerald-700 text-white rounded-2xl p-6 shadow-md">
+          <h3 class="text-lg font-bold flex items-center gap-2">
+            <i data-lucide="lightbulb" class="text-amber-300"></i>
+            <span>Secuencia Recomendada de Estudio</span>
+          </h3>
+          <p class="mt-2 text-sm text-teal-100">Optimiza tu retención: Primero lee el marco teórico en Lecturas, autoevalúate de inmediato en las Tarjetas de Repaso y por último comprueba tu efectividad en los Quizzes Diagnósticos.</p>
+          <div class="mt-4 flex gap-3">
+            <button onclick="switchTab('study')" class="bg-white text-teal-800 font-bold px-4 py-2 rounded-xl text-sm shadow hover:bg-teal-50 transition-colors">Ver Lecturas</button>
+            <button onclick="switchTab('test')" class="bg-teal-850 text-white font-bold px-4 py-2 rounded-xl text-sm hover:bg-teal-900 border border-teal-700 transition-colors">Ir a Pruebas</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================ -->
+      <!-- SECCIÓN: CONTENIDO DE ESTUDIO -->
+      <!-- ============================================ -->
+      <section id="tab-study" class="space-y-6 hidden">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b pb-4">
+          <div>
+            <h2 class="text-3xl font-extrabold tracking-tight">Programa Escrito de la Unidad 4</h2>
+            <p class="text-slate-500">Estudia de forma interactiva y guiada el material oficial sobre el concepto de literatura infantil, géneros literarios, cuentos cortos (*short stories*) y la técnica de *storytelling* en el aula de primaria.</p>
+          </div>
+          <div class="flex gap-2">
+            <button onclick="collapseAllSections()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors card-bg">Colapsar Todo</button>
+            <button onclick="expandAllSections()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors card-bg">Expandir Todo</button>
+          </div>
+        </div>
+
+        <!-- CONTROLES DE PORTAL DE LECTURA -->
+        <div class="flex flex-wrap items-center gap-4 bg-white p-4 rounded-xl border border-slate-100 card-bg">
+          <div class="flex-1 min-w-[240px] relative">
+            <input type="text" id="syllabus-search" oninput="searchSyllabus(this.value)" placeholder="Buscar conceptos en el silabo..." class="w-full bg-slate-50 text-slate-900 border border-slate-200 rounded-lg pl-10 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 card-bg">
+            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-3"></i>
+          </div>
+          <button onclick="toggleFilterBookmarked()" id="btn-filter-bookmark" class="flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-lg text-xs font-bold transition-colors card-bg text-slate-700">
+            <i data-lucide="bookmark" class="w-4 h-4"></i>
+            <span>Ver Favoritos</span>
+          </button>
+        </div>
+
+        <!-- CONTENEDORES DE LECTURAS ACADÉMICAS -->
+        <div id="syllabus-container" class="space-y-4">
+          
+          <!-- SECCIÓN 3.1 -->
+          <article id="sec-3.1" class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden card-bg transition-shadow duration-300">
+            <div class="bg-slate-50 px-6 py-4 flex items-center justify-between cursor-pointer card-bg" onclick="toggleSectionCollapse('sec-3.1-body')">
+              <div class="flex items-center gap-3">
+                <i data-lucide="chevron-down" id="sec-3.1-chevron" class="w-5 h-5 text-teal-500 transition-transform"></i>
+                <h3 class="font-extrabold text-lg">3.1. Children's Literature</h3>
+              </div>
+              <div class="flex items-center gap-2" onclick="event.stopPropagation()">
+                <!-- Text-to-speech -->
+                <button onclick="speakSyllabusSection('sec-3.1-speech-content')" class="p-2 text-teal-600 hover:bg-teal-50 rounded-lg transition-colors" title="Lector de pantalla">
+                  <i data-lucide="volume-2" class="w-4 h-4"></i>
+                </button>
+                <button onclick="toggleBookmark('sec-3.1')" id="bookmark-sec-3.1" class="p-2 text-slate-400 hover:text-amber-500 rounded-lg transition-colors">
+                  <i data-lucide="bookmark" class="w-4 h-4"></i>
+                </button>
+                <label class="flex items-center gap-1.5 bg-teal-50 hover:bg-teal-100 px-3 py-1 rounded-lg text-xs font-bold text-teal-700 cursor-pointer card-bg">
+                  <input type="checkbox" id="checkbox-sec-3.1" onchange="toggleReadProgress('sec31', this.checked)" class="rounded text-teal-600 focus:ring-teal-500">
+                  <span>Leído</span>
+                </label>
+              </div>
+            </div>
+
+            <div id="sec-3.1-body" class="px-6 py-6 border-t border-slate-100 space-y-4">
+              <div id="sec-3.1-speech-content" class="space-y-4 text-justify leading-relaxed font-sans">
+                
+                <h4 class="font-bold text-teal-800">Definition and Origins</h4>
+                <p>Children's literature consists of the body of written works and accompanying illustrations produced to entertain or instruct young people. The genre encompasses a wide range of works, including acknowledged classics of world literature, picture books and easy-to-read stories written exclusively for children, and fairy tales, lullabies, fables, folk songs, and other primarily orally transmitted materials.</p>
+                <p>It first clearly emerged as a distinct and independent form of literature in the second half of the 18th century, before which it had been at best only in an embryonic stage. During the 20th century, however, its growth has been luxuriant, establishing its place as a fully recognized branch of literature.</p>
+
+                <h4 class="font-bold text-teal-800 mt-4">Genres of Children's Literature</h4>
+                <p class="text-sm text-slate-500">Categorizing books is not a science; there are grey areas and subtypes. Here are the core genres:</p>
+                <ul class="list-disc pl-6 text-sm space-y-2">
+                  <li><strong>Contemporary realistic fiction:</strong> Stories that could happen to people or animals in the present. Characters are made up, but their actions and feelings are highly realistic (family/animal/sports stories, adventures, and mysteries).</li>
+                  <li><strong>Historical fiction:</strong> Set in a historical period, blending authentic historical settings/facts with imaginary characters and plots (written about a time in which the author has not lived).</li>
+                  <li><strong>Non-fiction or information books:</strong> Emphasize documented facts. They inform and entertain by excellence of presentation, illustration, and research.</li>
+                  <li><strong>Biography and Autobiography:</strong> Story of an actual person's life notable for accomplishments or significant triumphs. Autobiography is written by the person themselves.</li>
+                  <li><strong>Traditional literature:</strong> Ancient stories or poems originating in oral storytelling with no known original authors (myths, epics, legends, tall tales, fables, and religious stories).</li>
+                  <li><strong>Poetry:</strong> Artistic expression of ideas and feelings through rhythmical compositions of imaginative and beautiful carefully selected words.</li>
+                  <li><strong>Modern fantasy:</strong> Events, settings, or characters lie completely outside the realm of possibility. The author must create an internally logical and consistent world to suspended disbelief (fairytale by known authors, animal fantasy, toy personification, quest stories, time travel).</li>
+                  <li><strong>Science fiction (Futuristic fiction):</strong> Imaginative literature where unusual events occur under logical scientific principles or technical possibilities.</li>
+                  <li><strong>Picture books (Format, NOT a genre):</strong> Profusely illustrated books in which pictures are absolutely essential to complete the understanding and enjoyment of the story.</li>
+                </ul>
+
+                <h4 class="font-bold text-teal-800 mt-4">Historical Evolution in EFL Classes</h4>
+                <ul class="list-disc pl-6 text-sm space-y-2">
+                  <li><strong>19th Century:</strong> Under the Grammar Translation Method (GTM), literature predominated as students spent major class times translating literary texts into native tongues.</li>
+                  <li><strong>1960s - Late 1970s:</strong> Ignored. Under the Structuralist Approach, language learning was seen as a matter of linguistics focused on correctness of grammatical form and habit formation rather than content or style. Direct Method, Audiolingualism, TPR, and the Silent Way also ignored literature.</li>
+                  <li><strong>Late 1970s - Early 1980s:</strong> Ignored. The Communicative Approach initially favored "usable, practical" oral dialogues, leaving no space for literature in the curriculum.</li>
+                  <li><strong>Since 1980s (The Return):</strong> Highly valued to improve communicative competence, critical thinking, aesthetic appreciation, and cultural awareness.</li>
+                </ul>
+
+                <h4 class="font-bold text-teal-800 mt-4">Benefits of Using Literature (Collie & Slater 1991)</h4>
+                <p class="text-sm">Offers four key benefits: <strong>a) Authentic material</strong> (exposing learners to fresh, native-level structures), <strong>b) Cultural enrichment</strong> (seeing the world through others' eyes), <strong>c) Language advancement</strong> (increasing competence across all skills), and <strong>d) Personal growth</strong> (raising intellectual and emotional development).</p>
+
+              </div>
+            </div>
+          </article>
+
+          <!-- SECCIÓN 3.2 -->
+          <article id="sec-3.2" class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden card-bg transition-shadow duration-300">
+            <div class="bg-slate-50 px-6 py-4 flex items-center justify-between cursor-pointer card-bg" onclick="toggleSectionCollapse('sec-3.2-body')">
+              <div class="flex items-center gap-3">
+                <i data-lucide="chevron-down" id="sec-3.2-chevron" class="w-5 h-5 text-teal-500 transition-transform"></i>
+                <h3 class="font-extrabold text-lg">3.2. Short Stories: Selection Criteria and Use in ELT</h3>
+              </div>
+              <div class="flex items-center gap-2" onclick="event.stopPropagation()">
+                <button onclick="speakSyllabusSection('sec-3.2-speech-content')" class="p-2 text-teal-600 hover:bg-teal-50 rounded-lg transition-colors" title="Lector de pantalla">
+                  <i data-lucide="volume-2" class="w-4 h-4"></i>
+                </button>
+                <button onclick="toggleBookmark('sec-3.2')" id="bookmark-sec-3.2" class="p-2 text-slate-400 hover:text-amber-500 rounded-lg transition-colors">
+                  <i data-lucide="bookmark" class="w-4 h-4"></i>
+                </button>
+                <label class="flex items-center gap-1.5 bg-teal-50 hover:bg-teal-100 px-3 py-1 rounded-lg text-xs font-bold text-teal-700 cursor-pointer card-bg">
+                  <input type="checkbox" id="checkbox-sec-3.2" onchange="toggleReadProgress('sec32', this.checked)" class="rounded text-teal-600 focus:ring-teal-500">
+                  <span>Leído</span>
+                </label>
+              </div>
+            </div>
+
+            <div id="sec-3.2-body" class="px-6 py-6 border-t border-slate-100 space-y-4">
+              <div id="sec-3.2-speech-content" class="space-y-4 text-justify leading-relaxed font-sans">
+                
+                <h4 class="font-bold text-teal-800">Why Use Short Stories? Overcoming Objections</h4>
+                <p>Public schools often raise objections against literature due to overcrowded classes, overloaded syllabuses, and limited time. However, short stories successfully resolve these issues compared to other genres:</p>
+                <ul class="list-disc pl-6 text-sm space-y-1">
+                  <li><em>Poetry:</em> Deviated and figurative language takes too long to grasp.</li>
+                  <li><em>Novels:</em> Length makes them difficult to finish within limited class hours.</li>
+                  <li><em>Drama:</em> Difficult to act out inside crowded public classrooms.</li>
+                  <li><em>Short Stories:</em> Edgar Allan Poe defines a short story as a narrative read in one sitting (from 30 minutes to 2 hours), aimed at a 'single unique effect' with one plot, few characters, and simple settings. Easy for learners to follow.</li>
+                </ul>
+
+                <h4 class="font-bold text-teal-800 mt-4">Collie & Slater (1991) Advantages of Short Stories</h4>
+                <ol class="list-decimal pl-6 text-sm space-y-1">
+                  <li><strong>Practicality:</strong> Length allows them to be covered entirely in one or two class sessions.</li>
+                  <li><strong>Simplicity:</strong> Not too complicated for students to work with on their own.</li>
+                  <li><strong>Variety of choice:</strong> High variety to match different interests and tastes.</li>
+                  <li><strong>Utility:</strong> Applicable across all levels, age groups, and class hours.</li>
+                </ol>
+
+                <h4 class="font-bold text-teal-800 mt-4">Criteria for Choosing the Text</h4>
+                <p class="text-sm">Story selection is a key teacher role. To make learning student-centered, consider these criteria:</p>
+                <ul class="list-disc pl-6 text-sm space-y-2">
+                  <li><strong>Hill (1994) Basic Criteria:</strong> 1) Needs and abilities of students, 2) linguistic and stylistic level of the text, 3) amount of background information required to appreciate the material.</li>
+                  <li><strong>Ur (1996) Readability:</strong> Using unsimplified 'authentic' texts with less proficient learners is frustrating and counterproductive; simplified or graded texts are highly recommended.</li>
+                  <li><strong>Spack (1985) & McKay (2001) Engagement:</strong> Choose stories relevant to life experience, matching teacher interest, or which have film adaptations to provide visual interpretations.</li>
+                </ul>
+
+                <h4 class="font-bold text-teal-800 mt-4">Language Skills Development</h4>
+                <ul class="list-disc pl-6 text-sm space-y-2">
+                  <li><strong>Reading:</strong> Lao and Krashen (2000) Hong Kong university study revealed that students reading literary texts made much better improvement in vocabulary and reading comprehension than those reading non-literary texts.</li>
+                  <li><strong>Writing:</strong> Serves as both a model and subject matter. Oster (1989) affirms it helps students write more creatively.</li>
+                  <li><strong>Speaking and Listening:</strong> Developed via oral reading, dramatizations, roleplays, re-enactments, and classroom discussions, which also directly improve pronunciation.</li>
+                </ul>
+
+              </div>
+            </div>
+          </article>
+
+          <!-- SECCIÓN 3.3 -->
+          <article id="sec-3.3" class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden card-bg transition-shadow duration-300">
+            <div class="bg-slate-50 px-6 py-4 flex items-center justify-between cursor-pointer card-bg" onclick="toggleSectionCollapse('sec-3.3-body')">
+              <div class="flex items-center gap-3">
+                <i data-lucide="chevron-down" id="sec-3.3-chevron" class="w-5 h-5 text-teal-500 transition-transform"></i>
+                <h3 class="font-extrabold text-lg">3.3. Storybooks and Storytelling in ELT</h3>
+              </div>
+              <div class="flex items-center gap-2" onclick="event.stopPropagation()">
+                <button onclick="speakSyllabusSection('sec-3.3-speech-content')" class="p-2 text-teal-600 hover:bg-teal-50 rounded-lg transition-colors" title="Lector de pantalla">
+                  <i data-lucide="volume-2" class="w-4 h-4"></i>
+                </button>
+                <button onclick="toggleBookmark('sec-3.3')" id="bookmark-sec-3.3" class="p-2 text-slate-400 hover:text-amber-500 rounded-lg transition-colors">
+                  <i data-lucide="bookmark" class="w-4 h-4"></i>
+                </button>
+                <label class="flex items-center gap-1.5 bg-teal-50 hover:bg-teal-100 px-3 py-1 rounded-lg text-xs font-bold text-teal-700 cursor-pointer card-bg">
+                  <input type="checkbox" id="checkbox-sec-3.3" onchange="toggleReadProgress('sec33', this.checked)" class="rounded text-teal-600 focus:ring-teal-500">
+                  <span>Leído</span>
+                </label>
+              </div>
+            </div>
+
+            <div id="sec-3.3-body" class="px-6 py-6 border-t border-slate-100 space-y-4">
+              <div id="sec-3.3-speech-content" class="space-y-4 text-justify leading-relaxed font-sans">
+                
+                <h4 class="font-bold text-teal-800">The Rise of Storytelling in Primary Education</h4>
+                <p>Primary English teachers now use acquisition-based methodologies to create acquisition-rich environments. Handbooks solely devoted to this technique include Wright (1995, 1997), Zaro & Salaberri (1995), Gerngross & Puchta (1996), and Mourão (2003).</p>
+                <p>Additionally, the globalization of English has brought 'world Englishes' to classrooms, where storybooks serve to expose children to rich international accents and varieties. Since each child is unique, storybooks cater to different intelligences and learner profiles.</p>
+
+                <h4 class="font-bold text-teal-800 mt-4">Key Reasons for Using Storybooks</h4>
+                <ul class="list-disc pl-6 text-sm space-y-2">
+                  <li><strong>Motivating & Enjoyable:</strong> Stories build highly positive attitudes toward foreign languages and cultures.</li>
+                  <li><strong>Exercise Imagination:</strong> Personally involve students as they identify with characters and illustrations.</li>
+                  <li><strong>Fantasy to Reality Link:</strong> Enable children to forge links between home and school.</li>
+                  <li><strong>Shared Social Experience:</strong> Provokes shared responses of laughter, excitement, and anticipation, building class cohesion.</li>
+                  <li><strong>Repetition & Memorability:</strong> Natural repetitive context of key vocabulary allows items to enter speech effortlessly.</li>
+                  <li><strong>Acquisition-based Input:</strong> Applies Krashen's input hypothesis by offering optimal language input slightly above the level they are expected to produce.</li>
+                  <li><strong>Develop Learning Strategies:</strong> Fosters predicting, guessing meaning, and active listening using:
+                    <ul class="list-disc pl-6 text-xs mt-1 space-y-1 text-slate-600">
+                      <li>a. Visual clues (high-quality pictures and illustrations)</li>
+                      <li>b. Audio clues (sound effects, onomatopoeia)</li>
+                      <li>c. Prior language and prior world knowledge</li>
+                    </ul>
+                  </li>
+                </ul>
+
+                <h4 class="font-bold text-teal-800 mt-4">The Whole-School Educational Panning</h4>
+                <ul class="list-disc pl-6 text-sm space-y-2">
+                  <li><strong>Cross-curricular links:</strong> Link English with Math (counting, time, measuring), Science (insect cycles, animal life), Computing (using tech safely and purposefully), Art (making cards, collages, puppets), Geography (map/atlas use), History (chronology, prehistory), and PE (moving like animals).</li>
+                  <li><strong>Learning to Learn:</strong> Fosters autonomous learning through memory training, predicting, hypothesizing, and using/creating dictionaries.</li>
+                  <li><strong>Conceptual reinforcement:</strong> Reinforces concepts of color, size, shape, time, and cause-effect (e.g., using 'Princess Smartypants' to learn cause-effect).</li>
+                  <li><strong>Citizenship, diversity and multicultural education:</strong> Raises intercultural awareness and raises tolerance. Explicit focus stories like 'Something Else' promote acceptance, while cultural stories like 'The Kangaroo from Woolloomooloo' or 'The Clever Tortoise' illustrate cultural differences alongside shared global trickster themes.</li>
+                </ul>
+
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ============================================ -->
+      <!-- SECCIÓN: TARJETAS DE MEMORIA -->
+      <!-- ============================================ -->
+      <section id="tab-flashcards" class="space-y-6 hidden">
+        <div class="border-b pb-4">
+          <h2 class="text-3xl font-extrabold tracking-tight">Tarjetas de Memorización Dinámicas</h2>
+          <p class="text-slate-500">Repasa activamente los 40 conceptos clave del silabo oficial de la Unidad 4: Literatura Infantil, Cuentos Cortos y Storytelling.</p>
+        </div>
+
+        <!-- FILTROS DE REPASO -->
+        <div class="flex flex-wrap items-center justify-between gap-4 bg-white p-4 rounded-xl border border-slate-100 card-bg">
+          <div class="flex flex-wrap gap-2 text-xs font-bold">
+            <button onclick="filterCards('all')" id="card-btn-all" class="bg-teal-600 text-white px-3 py-1.5 rounded-lg">Ver Todas</button>
+            <button onclick="filterCards('remaining')" id="card-btn-remaining" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg card-bg">Por Repasar</button>
+            <button onclick="filterCards('difficult')" id="card-btn-difficult" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg card-bg">Dificultades</button>
+            <button onclick="filterCards('learned')" id="card-btn-learned" class="bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg card-bg">Dominadas</button>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="shuffleCards()" class="flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold px-3 py-1.5 rounded-lg card-bg">
+              <i data-lucide="shuffle" class="w-4 h-4"></i>
+              <span>Mezclar</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- VENTANA DE TARJETA FLIP 3D -->
+        <div class="max-w-md mx-auto space-y-6">
+          <div class="relative w-full h-80 cursor-pointer" onclick="flipFlashcard()">
+            <div id="flashcard" class="flashcard-inner w-full h-full relative">
+              
+              <!-- Frente de la Tarjeta -->
+              <div class="flashcard-front absolute inset-0 w-full h-full bg-white border border-teal-100 rounded-3xl p-8 shadow-md flex flex-col justify-between card-bg">
+                <div class="flex items-center justify-between">
+                  <span class="bg-teal-100 text-teal-700 font-bold px-3 py-1 rounded-full text-xs" id="card-badge">Concept</span>
+                  <button class="text-teal-600 hover:bg-teal-50 p-2 rounded-full transition-colors" onclick="speakFlashcardText(event, true)">
+                    <i data-lucide="volume-2" class="w-4 h-4"></i>
+                  </button>
+                </div>
+                <div class="flex-1 flex items-center justify-center text-center">
+                  <p class="text-lg font-extrabold leading-relaxed" id="card-front-text">Cargando...</p>
+                </div>
+                <div class="text-center text-xs text-slate-400">
+                  Haz clic para voltear • Teclado: Espacio
+                </div>
+              </div>
+
+              <!-- Reverso de la Tarjeta -->
+              <div class="flashcard-back absolute inset-0 w-full h-full bg-teal-50 border border-teal-200 rounded-3xl p-8 shadow-md flex flex-col justify-between card-bg">
+                <div class="flex items-center justify-between">
+                  <span class="bg-teal-600 text-white font-bold px-3 py-1 rounded-full text-xs">Explicación Oficial</span>
+                  <button class="text-teal-600 hover:bg-teal-50 p-2 rounded-full transition-colors" onclick="speakFlashcardText(event, false)">
+                    <i data-lucide="volume-2" class="w-4 h-4"></i>
+                  </button>
+                </div>
+                <div class="flex-1 flex items-center justify-center text-center overflow-y-auto max-h-44 py-2">
+                  <p class="text-base font-semibold leading-relaxed text-slate-800" id="card-back-text">Cargando...</p>
+                </div>
+                <div class="text-center text-xs text-teal-400">
+                  Haz clic para volver al frente
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- BOTONES DE CONTROL DE MEMORIA -->
+          <div class="flex justify-between items-center gap-4">
+            <button onclick="prevFlashcard()" class="flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-4 py-2.5 rounded-xl text-sm card-bg">
+              <i data-lucide="arrow-left"></i>
+              <span>Anterior</span>
+            </button>
+            
+            <div class="flex gap-2">
+              <button onclick="markCardDifficult(event)" class="bg-red-50 hover:bg-red-100 text-red-600 border border-red-100 font-bold px-4 py-2.5 rounded-xl text-sm transition-colors flex items-center gap-1">
+                <i data-lucide="alert-circle" class="w-4 h-4"></i>
+                <span>Difícil</span>
+              </button>
+              <button onclick="markCardLearned(event)" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-600 border border-emerald-100 font-bold px-4 py-2.5 rounded-xl text-sm transition-colors flex items-center gap-1">
+                <i data-lucide="check" class="w-4 h-4"></i>
+                <span>Dominada</span>
+              </button>
+            </div>
+
+            <button onclick="nextFlashcard()" class="flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-4 py-2.5 rounded-xl text-sm card-bg">
+              <span>Siguiente</span>
+              <i data-lucide="arrow-right"></i>
+            </button>
+          </div>
+
+          <!-- CONTADOR DE REGISTRO -->
+          <div class="text-center text-sm text-slate-500" id="card-counter">
+            Tarjeta 1 de 40
+          </div>
+        </div>
+      </section>
+
+      <!-- ============================================ -->
+      <!-- SECCIÓN: EXÁMENES DE PRÁCTICA -->
+      <!-- ============================================ -->
+      <section id="tab-test" class="space-y-6 hidden">
+        <div class="border-b pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-3xl font-extrabold tracking-tight">Evaluación Diagnóstica</h2>
+            <p class="text-slate-500">Mide tu retención teórica con este examen compuesto de 15 preguntas por nivel (45 en total) diseñado según las directrices oficiales.</p>
+          </div>
+          <div class="flex gap-2 bg-slate-100 p-1 rounded-xl card-bg text-xs font-bold" id="level-tabs">
+            <button onclick="switchTestLevel('easy')" id="btn-lvl-easy" class="px-4 py-2 rounded-lg bg-white text-slate-900 shadow">Fácil (Easy)</button>
+            <button onclick="switchTestLevel('medium')" id="btn-lvl-medium" class="px-4 py-2 rounded-lg text-slate-500">Intermedio (Medium)</button>
+            <button onclick="switchTestLevel('hard')" id="btn-lvl-hard" class="px-4 py-2 rounded-lg text-slate-500">Avanzado (Hard)</button>
+          </div>
+        </div>
+
+        <!-- CONTENEDOR DIAGNÓSTICO -->
+        <div id="quiz-container" class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 sm:p-8 card-bg space-y-6">
+          <div class="flex items-center justify-between border-b pb-4">
+            <div>
+              <span class="text-xs font-bold text-teal-600 tracking-widest uppercase" id="quiz-level-indicator">Easy Level</span>
+              <h3 class="font-bold text-lg" id="quiz-title-indicator">Pregunta 1 de 15</h3>
+            </div>
+            <!-- Indicador gráfico de progreso -->
+            <div class="w-32 bg-slate-100 h-2.5 rounded-full overflow-hidden card-bg">
+              <div id="quiz-progress-bar" class="bg-teal-600 h-full transition-all" style="width: 6.6%"></div>
+            </div>
+          </div>
+
+          <!-- Pregunta Prompt -->
+          <div class="space-y-4">
+            <div class="flex items-start justify-between gap-2">
+              <p class="text-xl font-bold leading-relaxed text-slate-800" id="quiz-question-text">
+                Cargando pregunta...
+              </p>
+              <button onclick="speakSyllabusSection('quiz-question-text')" class="p-2 text-teal-600 hover:bg-teal-50 rounded-lg transition-colors" title="Leer texto">
+                <i data-lucide="volume-2" class="w-5 h-5"></i>
+              </button>
+            </div>
+            
+            <!-- Elección múltiple -->
+            <div class="grid grid-cols-1 gap-3" id="quiz-options-box">
+              <!-- Cargado dinámicamente -->
+            </div>
+          </div>
+
+          <!-- Acciones de entrega y retroalimentación -->
+          <div class="space-y-4 pt-4 border-t border-slate-100">
+            <div id="quiz-feedback-box" class="hidden p-5 rounded-2xl border transition-all">
+              <!-- Comentarios correctivos automáticos se generan aquí -->
+            </div>
+
+            <div class="flex justify-between items-center gap-4">
+              <button onclick="resetCurrentQuiz()" class="text-xs font-bold text-slate-400 hover:text-slate-600 flex items-center gap-1.5">
+                <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                <span>Reiniciar Nivel</span>
+              </button>
+              
+              <button id="btn-submit-answer" onclick="submitQuizAnswer()" class="bg-teal-600 text-white font-bold px-6 py-3 rounded-xl shadow hover:bg-teal-700 transition-colors">
+                Validar Respuesta
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- RESUMEN FINAL DEL TEST -->
+        <div id="quiz-summary-panel" class="hidden bg-white rounded-3xl border border-slate-100 shadow-sm p-8 text-center card-bg space-y-6">
+          <div class="w-24 h-24 bg-teal-50 rounded-full flex items-center justify-center mx-auto text-teal-600 card-bg">
+            <i data-lucide="award" class="w-12 h-12"></i>
+          </div>
+          <div>
+            <h3 class="text-2xl font-bold">¡Nivel Completado!</h3>
+            <p class="text-slate-500 mt-1" id="quiz-summary-subtitle">Evaluación de contenidos superada correctamente.</p>
+          </div>
+          
+          <div class="grid grid-cols-2 gap-4 max-w-sm mx-auto my-4">
+            <div class="p-4 bg-slate-50 rounded-2xl card-bg">
+              <div class="text-2xl font-black text-teal-600" id="quiz-summary-score">0 / 15</div>
+              <div class="text-xs text-slate-400 font-bold mt-1">Aciertos Correctos</div>
+            </div>
+            <div class="p-4 bg-slate-50 rounded-2xl card-bg">
+              <div class="text-2xl font-black text-emerald-500" id="quiz-summary-percent">0%</div>
+              <div class="text-xs text-slate-400 font-bold mt-1">Precisión General</div>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap items-center justify-center gap-3">
+            <button onclick="restartTestLevel()" class="bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold px-6 py-3 rounded-xl transition-all card-bg text-sm">Volver a Intentar</button>
+            <button onclick="advanceNextQuizLevel()" class="bg-teal-600 hover:bg-teal-700 text-white font-bold px-6 py-3 rounded-xl transition-all text-sm shadow">Siguiente Nivel</button>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- NAVEGACIÓN Y CONFIGURACIÓN DEL ASISTENTE JS -->
+  <script>
+    // Variables de configuración de estado
+    const state = {
+      activeTab: 'dashboard',
+      settings: {
+        fontSize: '16px',
+        theme: 'light',
+        dyslexicFont: false,
+        focusMode: false,
+      },
+      readingProgress: {
+        sec31: false,
+        sec32: false,
+        sec33: false
+      },
+      bookmarks: [],
+      filterBookmarkedOnly: false,
+      
+      // BASE COMPLETA DE 40 FLASHCARDS EXTRAÍDAS LITERALMENTE DEL PDF (UNIT 4)
+      flashcards: [
+        {
+          id: 1,
+          section: "3.1",
+          badge: "Definition",
+          front: "What is Children's Literature?",
+          back: "The body of written works and accompanying illustrations produced to entertain or instruct young people, encompassing classics, picture books, fairy tales, lullabies, fables, and oral songs.",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 2,
+          section: "3.1",
+          badge: "Dates, Events & Context",
+          front: "When did Children's Literature first emerge as a distinct form?",
+          back: "In the second half of the 18th century. Before this era, it was only in an embryonic stage.",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 3,
+          section: "3.1",
+          badge: "Category",
+          front: "How is Contemporary Realistic Fiction defined?",
+          back: "Stories that could happen to people or animals in the present, depicting actions and feelings of contemporary people (e.g., family, animal, sports, mystery, and adventures).",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 4,
+          section: "3.1",
+          badge: "Category",
+          front: "How is Historical Fiction defined?",
+          back: "Stories set in an historical period that blend authentic historical settings and facts with imaginary characters and plots (written about a time in which the author has not lived).",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 5,
+          section: "3.1",
+          badge: "Category",
+          front: "What is Traditional Literature and what is its origin?",
+          back: "Ancient stories/poems of cultures originating in the oral storytelling tradition with no known original authors (myths, epics, fables, legends, tall tales). Used to pass down wisdom.",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 6,
+          section: "3.1",
+          badge: "Category",
+          front: "What is Modern Fantasy?",
+          back: "Works of literature in which events, settings, or characters are outside the realm of possibility. The author must create an internally logical, consistent world to suspend disbelief.",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 7,
+          section: "3.1",
+          badge: "Category",
+          front: "What is Science Fiction?",
+          back: "Imaginative literature (sometimes called futuristic fiction) where unusual events occur under logical scientific principles or technical possibilities.",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 8,
+          section: "3.1",
+          badge: "Concept",
+          front: "Explain the concept of a 'Picture Book' and why it is not a genre.",
+          back: "It is a format, not a genre. They are profusely illustrated books in which pictures are essential to complete understanding and enjoyment of the plot, setting, character, and mood.",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 9,
+          section: "3.1",
+          badge: "Concept",
+          front: "Why was literature important in the 19th-century EFL class?",
+          back: "Under the Grammar Translation Method (GTM), translating literary texts from the foreign language to the native language was one of the main learning activities.",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 10,
+          section: "3.1",
+          badge: "History",
+          front: "Why was literature ignored in EFL between the 1960s and late 1970s?",
+          back: "The Structuralist Approach predominated, focusing strictly on accuracy of grammatical form and linguistics rather than content, style, or interpretation of the written word.",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 11,
+          section: "3.1",
+          badge: "History",
+          front: "When did literature return to EFL classes, and what is its current purpose?",
+          back: "Since the 1980s. Unlike GTM, it is now used to improve communicative competence, critical thinking, aesthetic appreciation, and cultural/societal awareness.",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 12,
+          section: "3.1",
+          badge: "Evidence & Findings",
+          front: "What are the four benefits of literature in language teaching (Collie & Slater 1991)?",
+          back: "1) Authentic material, 2) Cultural enrichment, 3) Language advancement, and 4) Personal growth.",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 13,
+          section: "3.2",
+          badge: "Comparison",
+          front: "What are the three objections to using poetry, novels, and drama in public schools?",
+          back: "Poetry contains deviated figurative language that takes too long to grasp; novels are too long for limited class hours; drama is difficult to act out in crowded classrooms.",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 14,
+          section: "3.2",
+          badge: "Definition",
+          front: "What is a Short Story according to Edgar Allan Poe?",
+          back: "A narrative that can be read at one sitting of from one-half hour to two hours, limited to a 'single unique effect' to which every detail is subordinate.",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 15,
+          section: "3.2",
+          badge: "Advantages",
+          front: "What are the four advantages of short stories for language teachers?",
+          back: "1) Practicality (short, covers in 1-2 sessions), 2) Simplicity (easy self-study), 3) Variety of choice (diverse tastes), 4) Utility (all ages, levels, and hours).",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 16,
+          section: "3.2",
+          badge: "Principles",
+          front: "What are Hill's (1994) three basic criteria for choosing a short story?",
+          back: "1) Student needs and abilities, 2) Linguistic and stylistic level of the text, and 3) Amount of background information required.",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 17,
+          section: "3.2",
+          badge: "Evidence & Findings",
+          front: "What did Ur (1996) suggest regarding authentic texts with less proficient learners?",
+          back: "Using authentic texts with less proficient learners is frustrating and counterproductive; simplified or graded texts are highly recommended instead.",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 18,
+          section: "3.2",
+          badge: "Principles",
+          front: "What kind of stories do Spack (1985) and McKay (2001) suggest teachers choose?",
+          back: "Spack suggests stories that have visual film adaptations; McKay (and Rivers) suggests subject-matter relevant to life experiences and interests.",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 19,
+          section: "3.2",
+          badge: "Evidence & Findings",
+          front: "What did the Lao and Krashen (2000) study in Hong Kong conclude?",
+          back: "Students who read literary texts made significantly better improvements in vocabulary and reading comprehension compared to those reading non-literary texts.",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 20,
+          section: "3.2",
+          badge: "Relationships Between Concepts",
+          front: "How can short stories be used to develop writing skills?",
+          back: "As a powerful model (students write creatively by imitating its content, organization, or style) and as motivating subject matter.",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 21,
+          section: "3.2",
+          badge: "Concept",
+          front: "How do short stories enhance speaking and listening skills?",
+          back: "Through student-centered activities such as oral reading, dramatization, improvisation, roleplaying, re-enactment, and discussions (which also improve pronunciation).",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 22,
+          section: "3.3",
+          badge: "History",
+          front: "What marked the development of storytelling in primary EFL classrooms?",
+          back: "A shift to an acquisition-based methodology where storybooks and storytelling are used to create an acquisition-rich classroom environment.",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 23,
+          section: "3.3",
+          badge: "Authors & Researchers",
+          front: "Which notable storytelling handbooks are listed in the syllabus?",
+          back: "Wright (1995, 1997), Zaro & Salaberri (1995), Gerngross & Puchta (1996), and Mourão (2003).",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 24,
+          section: "3.3",
+          badge: "Principles",
+          front: "Why are narrative conventions (like 'Once upon a time') useful?",
+          back: "Children are already familiar with them from their mother tongue, allowing them to predict events easily in the foreign language.",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 25,
+          section: "3.3",
+          badge: "Advantages",
+          front: "How do storybooks exercise children's imagination?",
+          back: "Children identify with characters and interpret narratives and illustrations, forging a link between fantasy and their real-world lives.",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 26,
+          section: "3.3",
+          badge: "Advantages",
+          front: "How does storytelling function as a shared social experience?",
+          back: "It provokes shared classroom responses (laughter, sadness, anticipation), building student self-confidence and emotional development.",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 27,
+          section: "3.3",
+          badge: "Advantages",
+          front: "Why is the repetitive nature of stories beneficial for language acquisition?",
+          back: "Natural repetition of key structures/vocabulary allows certain language items to be acquired effortlessly while others are overtly reinforced.",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 28,
+          section: "3.3",
+          badge: "Principles",
+          front: "How do storybooks cater to diverse learning needs and intelligences?",
+          back: "The richness of content and illustrations allow the teacher to cater to all learner types, letting children respond at their own linguistic or cognitive level.",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 29,
+          section: "3.3",
+          badge: "Theories and Models",
+          front: "How does storytelling apply Krashen's (1981) language input theory?",
+          back: "By providing optimal language input that is slightly above the level students are expected to produce (Krashen's 'i+1' input).",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 30,
+          section: "3.3",
+          badge: "Concept",
+          front: "What are the cross-curricular links for Maths in storytelling?",
+          back: "Integrating maths topics like time, numbers (counting, quantity, addition, and subtraction), and measuring directly into the story.",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 31,
+          section: "3.3",
+          badge: "Concept",
+          front: "What are the cross-curricular links for Science in storytelling?",
+          back: "Integrating biological science concepts such as insect life cycles, animals, and skeletons.",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 32,
+          section: "3.3",
+          badge: "Concept",
+          front: "What are the cross-curricular links for Geography and History in storytelling?",
+          back: "Geography: maps, atlases, conservation. History: prehistoric animals, chronology, and understanding the passing of time.",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 33,
+          section: "3.3",
+          badge: "Concept",
+          front: "What does 'learning to learn' mean in the context of storytelling?",
+          back: "Developing autonomous learning strategies (planning, predicting, self-testing, self-assessment, memory training, and using dictionaries).",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 34,
+          section: "3.3",
+          badge: "Concept",
+          front: "Give an example of storybooks reinforcing conceptual development.",
+          back: "Reinforcing concepts of color, size, shape, time, and cause-effect (e.g., using 'Princess Smartypants' to develop cause and effect).",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 35,
+          section: "3.3",
+          badge: "Concept",
+          front: "How do storybooks teach citizenship, diversity, and multicultural education?",
+          back: "By raising intercultural awareness, promoting equal opportunities, tolerance, and acceptance of different cultures and ideologies.",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 36,
+          section: "3.3",
+          badge: "Examples",
+          front: "Give an example of a storybook that explicitly focuses on diversity.",
+          back: "'Something Else', which makes important points about sameness, difference, tolerance, and acceptance of others.",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 37,
+          section: "3.3",
+          badge: "Examples",
+          front: "Give examples of storybooks that show cultural differences and similarities.",
+          back: "'The Kangaroo from Woolloomooloo' and 'The Clever Tortoise' (both show exotic characteristics yet share similar themes of animal trickery).",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 38,
+          section: "3.3",
+          badge: "Causes and Effects",
+          front: "What effect does poor classroom communication have on students?",
+          back: "It is partially responsible for higher student dropout rates. Conversely, better teacher communication leads to better grades and retention.",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 39,
+          section: "3.3",
+          badge: "Causes and Effects",
+          front: "What effect does good teacher communication have in classrooms?",
+          back: "It models and coaches self-advocacy, closed the gap between privileged and disadvantaged students, and fosters an encouraging, positive environment.",
+          learned: false,
+          difficult: false
+        },
+        {
+          id: 40,
+          section: "3.2",
+          badge: "Principles",
+          front: "What vocabulary and sentence structure should be avoided below intermediate level?",
+          back: "Archaic, slang, foreign words, allusions, local dialects, and very long sentences should be avoided to prevent students from getting bored.",
+          learned: false,
+          difficult: false
+        }
+      ],
+      currentCardIndex: 0,
+      activeCardFilter: 'all',
+      isCardFlipped: false,
+
+      // CONFIGURACIÓN DE EXÁMENES DIAGNÓSTICOS (EASY, MEDIUM, HARD)
+      testLevel: 'easy',
+      currentQuestionIndex: 0,
+      userAnswers: {
+        easy: Array(15).fill(null),
+        medium: Array(15).fill(null),
+        hard: Array(15).fill(null)
+      },
+      quizAnswersChecked: {
+        easy: Array(15).fill(false),
+        medium: Array(15).fill(false),
+        hard: Array(15).fill(false)
+      }
+    };
+
+    // MOTOR DE SÍNTESIS DE VOZ (TTS)
+    let currentSpeechUtterance = null;
+    function speakText(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        currentSpeechUtterance = new SpeechSynthesisUtterance(text);
+        currentSpeechUtterance.rate = 0.95;
+        currentSpeechUtterance.lang = "en-US";
+        window.speechSynthesis.speak(currentSpeechUtterance);
+      } else {
+        showToast("La síntesis de voz no es compatible con este navegador.");
+      }
+    }
+
+    function stopSpeech() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+    }
+
+    function speakSyllabusSection(elementId) {
+      const text = document.getElementById(elementId).innerText;
+      speakText(text);
+    }
+
+    function speakFlashcardText(event, isFront) {
+      event.stopPropagation();
+      const list = getFilteredCards();
+      if (list.length === 0) return;
+      const text = isFront 
+        ? list[state.currentCardIndex].front 
+        : list[state.currentCardIndex].back;
+      speakText(text);
+    }
+  </script>
+
+  <!-- BANCO COMPLETO DE PREGUNTAS DIAGNÓSTICAS (15 por cada nivel, 45 en total) -->
+  <script>
+    const quizData = {
+      easy: [
+        {
+          q: "When did children's literature first clearly emerge as a distinct and independent form of literature?",
+          options: ["Second half of the 18th century", "Early 20th century", "19th-century GTM era", "Ancient oral storytelling era"],
+          correctIndex: 0,
+          explanations: {
+            correct: "Page 1 of the PDF explicitly states: 'Children's literature first clearly emerged as a distinct and independent form of literature in the second half of the 18th century.'",
+            distractors: [
+              "The early 20th century is incorrect and represents the era of luxuriant growth described later in the text.",
+              "The 19th century was dominated by GTM in EFL, but children's literature had already emerged in the 18th.",
+              "Ancient oral storytelling was the embryonic precursor, not the distinct emerged independent form."
+            ]
+          }
+        },
+        {
+          q: "Which children's book category is described as documented facts informing and entertaining readers about the physical, biological, or social world?",
+          options: ["Modern fantasy", "Traditional literature", "Non-fiction or information books", "Contemporary realistic fiction"],
+          correctIndex: 2,
+          explanations: {
+            correct: "Page 1 states: 'Non-fiction or information books emphasize documented facts... written about any aspect of the physical, biological, or social world.'",
+            distractors: [
+              "Modern fantasy focuses on elements outside the realm of possibility.",
+              "Traditional literature originates in oral storytelling with no known original authors.",
+              "Contemporary realistic fiction contains believable characters/feelings, but represents made-up stories rather than pure documented facts."
+            ]
+          }
+        },
+        {
+          q: "Who is the author of an autobiography?",
+          options: ["An actual person writing about him- or herself", "A secondary historical figure", "A native speaker reviewing a translation", "An anonymous oral storyteller"],
+          correctIndex: 0,
+          explanations: {
+            correct: "Page 1 clarifies: 'An autobiography is simply a biography written by a person about him- or herself.'",
+            distractors: [
+              "A secondary historical figure may appear in historical fiction, not necessarily an autobiography.",
+              "Native speaker reviews are irrelevant to autobiography authorship.",
+              "Traditional literature is characterized by anonymous storytellers, whereas autobiography has a specific known author writing about their own life."
+            ]
+          }
+        },
+        {
+          q: "According to Edgar Allan Poe, a short story is a narrative that can be read in:",
+          options: ["One sitting of 30 minutes to two hours", "At least one full school semester", "Less than ten minutes of class", "A continuous 24-hour cycle"],
+          correctIndex: 0,
+          explanations: {
+            correct: "Page 4 states: 'the short story, which is defined by Poe... as a narrative that can be read at one sitting of from one-half hour to two hours...'",
+            distractors: [
+              "One full school semester is far too long and contradicts Poe's 'one sitting' definition.",
+              "Less than ten minutes is an understatement and not supported by the cited definition.",
+              "A continuous 24-hour cycle is incorrect and physically impractical for a single sitting."
+            ]
+          }
+        },
+        {
+          q: "Which method dominated language teaching in the 19th century and made heavy use of translating literature?",
+          options: ["Structuralist Approach", "Grammar Translation Method", "Communicative Approach", "Direct Method"],
+          correctIndex: 1,
+          explanations: {
+            correct: "Page 2 states: 'In the nineteenth century, the Grammar Translation Method (GTM) predominated ESL/EFL teaching... translating literary texts was one of the main learning activities.'",
+            distractors: [
+              "The Structuralist Approach predominated in the 1960s/1970s and ignored literature.",
+              "The Communicative Approach emerged in the late 70s and early 80s.",
+              "The Direct Method succeeded GTM but did not make heavy use of translating literature."
+            ]
+          }
+        },
+        {
+          q: "Which of the following is defined as a format rather than a genre of children's literature?",
+          options: ["Science fiction", "Historical fiction", "Biography", "Picture books"],
+          correctIndex: 3,
+          explanations: {
+            correct: "Page 2 explicitly parenthesizes: 'Picture books (which are a format, not a genre) are profusely illustrated books...'",
+            distractors: [
+              "Science fiction is a distinct genre defined by scientific principles.",
+              "Historical fiction is a genre set in authentic historical settings.",
+              "Biography is a genre telling the story of an actual person's life."
+            ]
+          }
+        },
+        {
+          q: "According to Collie and Slater (1991), which of the following is NOT one of the four advantages of short stories for teachers?",
+          options: ["Practicality", "Simplicity", "Absolute grammatical correctness", "Utility"],
+          correctIndex: 2,
+          explanations: {
+            correct: "Page 4 lists the four advantages: Practicality, Simplicity, Variety, and Utility. 'Absolute grammatical correctness' is not on the list.",
+            distractors: [
+              "Practicality is an advantage based on text length.",
+              "Simplicity is an advantage based on students working on their own.",
+              "Utility is an advantage across all levels, ages, and times."
+            ]
+          }
+        },
+        {
+          q: "In the Structuralist Approach of the 1960s and 1970s, literature was not used because:",
+          options: ["It was too short for course hours", "Structuralism focused on grammatical correctness, not content or style", "Students only wanted high-tech web tools", "It required too many visual film adaptations"],
+          correctIndex: 1,
+          explanations: {
+            correct: "Page 2 states: 'Structuralism was concerned with correctness of grammatical form and not with content or interpretation of the written word or style.'",
+            distractors: [
+              "Class hours were not the reason Structuralism rejected literature.",
+              "High-tech web tools did not exist in the 1960s/1970s.",
+              "Film adaptation was proposed by Spack (1985), which is irrelevant to 1960s Structuralism."
+            ]
+          }
+        },
+        {
+          q: "Which storybook is explicitly mentioned in the text as teaching tolerance and acceptance of others?",
+          options: ["Princess Smartypants", "Something Else", "The Clever Tortoise", "The Kangaroo from Woolloomooloo"],
+          correctIndex: 1,
+          explanations: {
+            correct: "Page 7 states: 'For example, Something Else makes important points about sameness and difference and develops tolerance, understanding and acceptance of others.'",
+            distractors: [
+              "Princess Smartypants is mentioned as a tool for conceptual development of cause and effect.",
+              "The Clever Tortoise is cited as a story from another culture showing shared trickery themes.",
+              "The Kangaroo from Woolloomooloo shows exotic cultural characteristics but not the explicit tolerance focus of 'Something Else'."
+            ]
+          }
+        },
+        {
+          q: "Which handbook author is NOT listed under the notable storytelling guides on Page 5?",
+          options: ["Wright", "Mourão", "Gardner", "Gerngross and Puchta"],
+          correctIndex: 2,
+          explanations: {
+            correct: "Notable storytelling handbooks include Wright, Zaro & Salaberri, Gerngross & Puchta, and Mourão. Gardner is not listed on Page 5 (Gardner is cited in Unit 1/Unit 3 for motivation).",
+            distractors: [
+              "Wright (1995, 1997) is explicitly listed on Page 5.",
+              "Mourão (2003) is explicitly listed on Page 5.",
+              "Gerngross and Puchta (1996) are explicitly listed on Page 5."
+            ]
+          }
+        },
+        {
+          q: "According to the Learning Pyramid in Unit 2 / active methodologies context, what is the retention rate of 'Demonstration' after 24 hours?",
+          options: ["5%", "10%", "30%", "50%"],
+          correctIndex: 2,
+          explanations: {
+            correct: "The Learning Pyramid shows average retention rates: Demonstration has a 30% retention rate.",
+            distractors: [
+              "5% corresponds to Lectures.",
+              "10% corresponds to Reading.",
+              "50% corresponds to Discussion Groups."
+            ]
+          }
+        },
+        {
+          q: "What is the main characteristic of contemporary realistic fiction?",
+          options: ["Stories set in ancient history with no known authors", "Stories about imaginary events completely outside the realm of possibility", "Stories that could happen to people or animals in the present time", "Rhymed verses carefully selected for rhythmical composition"],
+          correctIndex: 2,
+          explanations: {
+            correct: "Page 1 states: 'Contemporary realistic fiction includes stories that could happen to people or animals... in the present time and portray attitudes and problems of contemporary people.'",
+            distractors: [
+              "Option A describes traditional literature.",
+              "Option B describes modern fantasy.",
+              "Option D describes poetry."
+            ]
+          }
+        },
+        {
+          q: "Which of the following is an objection raised against using novels in public schools?",
+          options: ["The novel's length makes it difficult to finish within course limits", "It uses too much figurative language", "It is impossible to translate", "It cannot be read at all by children"],
+          correctIndex: 0,
+          explanations: {
+            correct: "Page 3 notes: 'the length of novel will make it difficult for such classes to finish.'",
+            distractors: [
+              "Figurative language is an objection raised against poetry, not novels.",
+              "Translation difficulties are associated with GTM, not general novel length objections.",
+              "Novels can be read, but are impractical due to public school time constraints."
+            ]
+          }
+        },
+        {
+          q: "According to Krashen's language input theory, optimal input should be:",
+          options: ["Slightly above the level they are expected to produce", "Identical to GTM translation keys", "Deductive rules only", "Purely nonverbal drawings with zero words"],
+          correctIndex: 0,
+          explanations: {
+            correct: "Page 7 states: 'optimal input (Krashen 1981: 103) - language input that is slightly above the level they are expected to produce.'",
+            distractors: [
+              "GTM translation keys represent GTM, which did not use optimal input theories.",
+              "Deductive rules represent traditional approaches, not Krashen's input model.",
+              "While nonverbal clues help comprehension, the input itself must contain linguistic elements (i+1)."
+            ]
+          }
+        },
+        {
+          q: "What is the average retention rate of 'Teach Others' in the Learning Pyramid?",
+          options: ["90%", "75%", "50%", "20%"],
+          correctIndex: 0,
+          explanations: {
+            correct: "The Learning Pyramid lists 'Teach Others' as the highest average retention activity with 90% retention.",
+            distractors: [
+              "75% corresponds to 'Practice by Doing'.",
+              "50% corresponds to 'Discussion Group'.",
+              "20% corresponds to 'Audio Visual'."
+            ]
+          }
+        }
+      ],
+      medium: [
+        {
+          q: "How does the role of literature in 1980s CLT differ from its role in the 19th-century Grammar Translation Method?",
+          options: [
+            "1980s CLT uses literature to advance communicative competence and critical thinking, whereas GTM used it for translation activities",
+            "CLT completely banned literature, while GTM used it for audio drills",
+            "GTM used literature to teach speaking, while CLT uses it to teach rules deductively",
+            "There is no difference; both models focused strictly on structural correctness"
+          ],
+          correctIndex: 0,
+          explanations: {
+            correct: "Page 2 explains: 'different from the way it was used with the GTM, the current use of literary works in ESL/EFL classes is to improve communicative competence and providing \"a springboard for the development of critical thinking...\"'",
+            distractors: [
+              "CLT does not ban literature; it returned to CLT in the 1980s. GTM did not use audio drills.",
+              "GTM did not teach speaking (Dialogues predominated late 70s CLT).",
+              "CLT does not teach grammar rules deductively; GTM did."
+            ]
+          }
+        },
+        {
+          q: "Why are simplified or graded texts recommended for less proficient readers instead of authentic texts?",
+          options: [
+            "Using authentic text with less proficient learners is often frustrating and counterproductive",
+            "Simplified texts allow students to skip grammar translation completely",
+            "Authentic texts contain no vocabulary whatsoever",
+            "Simplified texts are longer and contain archaic words"
+          ],
+          correctIndex: 0,
+          explanations: {
+            correct: "Page 4 cites Ur (1996): '... the use of \"authentic\" text with less proficient learners is often frustrating and counterproductive... simplified text with less proficient readers is highly suggested...'",
+            distractors: [
+              "Skipping grammar translation is an active method trait, not the primary reason simplified texts are used.",
+              "Authentic texts contain highly complex, native-intended vocabulary, not 'no vocabulary'.",
+              "Simplified texts are shorter and actively avoid archaic words to support readability."
+            ]
+          }
+        },
+        {
+          q: "Which study by Lao and Krashen (2000) evaluated the impact of reading literary texts?",
+          options: [
+            "A study in Hong Kong comparing literary and non-literary text reading achievement",
+            "A survey of pre-service teachers in Florida regarding lallation",
+            "A research project on Australian citizenship and drama",
+            "An evaluation of Apple and Google design teams"
+          ],
+          correctIndex: 0,
+          explanations: {
+            correct: "Page 5 notes: 'The results of Lao and Krashen's (2000) study, which compared the reading achievement between a group... that read literary texts and a second group... at a university in Hong Kong...'",
+            distractors: [
+              "Florida's languages are mentioned on Page 2, but are unrelated to the Lao and Krashen study.",
+              "Australian citizenship is mentioned under cross-curricular links, not Hong Kong.",
+              "Design thinking mentions Apple and Google, not reading achievement."
+            ]
+          }
+        },
+        {
+          q: "How does Hill's (1994) criteria for text selection protect less proficient readers?",
+          options: [
+            "By avoiding stories with archaic, slang, or foreign words and highly complex sentence structures",
+            "By forcing students to only translate texts silently",
+            "By selecting novels that require months of study",
+            "By ignoring students' life experience and interests"
+          ],
+          correctIndex: 0,
+          explanations: {
+            correct: "Page 4 notes: 'The short stories with archaic, slang, foreign words, and allusions... should be avoided if the text is intended for students who are below intermediate level.'",
+            distractors: [
+              "Silently translating is GTM, which did not utilize Hill's criteria.",
+              "Selecting long novels contradicts the practicality of short stories and Hill's criteria.",
+              "Hill's criteria are designed to support, not ignore, student abilities and experiences."
+            ]
+          }
+        },
+        {
+          q: "What is the relationship between storytelling repetition and language acquisition according to the text?",
+          options: [
+            "Frequent repetition allows certain language items to be acquired while others are overtly reinforced",
+            "Repetition causes students to lose interest in the narrative",
+            "Repetition turns everyday language into GTM translation templates",
+            "There is no benefit; repetition decreases active cognitive processing"
+          ],
+          correctIndex: 0,
+          explanations: {
+            correct: "Page 6 explains: 'This frequent repetition allows certain language items to be acquired while others are being overtly reinforced.'",
+            distractors: [
+              "Repetition helps children remember details and anticipate events, boosting their enjoyment.",
+              "Repetition does not relate to GTM translation templates.",
+              "Repetition actively supports children's prediction and memory strategies."
+            ]
+          }
+        },
+        {
+          q: "Compare 'traditional literature' with 'modern fantasy'. What is the key difference regarding authorship?",
+          options: [
+            "Traditional literature has no known original author, while modern fantasy is written by a known author",
+            "Modern fantasy has no known author, while traditional literature is written by a single historical figure",
+            "Traditional literature must be futuristic, while modern fantasy must be historical",
+            "Both are completely anonymous and originated in ancient oral epics"
+          ],
+          correctIndex: 0,
+          explanations: {
+            correct: "Page 1 states traditional literature has 'no known original authors' originating in oral storytelling. Modern fantasy (Page 2) refers to works with 'known authors' (e.g., modern fairytale).",
+            distractors: [
+              "This option reverses the authorships of the two genres.",
+              "Traditional literature is ancient and oral, while science fiction is futuristic, making this option incorrect.",
+              "Modern fantasy is written by known authors and traditional literature is anonymous, making the claim of both being anonymous incorrect."
+            ]
+          }
+        },
+        {
+          q: "Why is poetry considered more difficult to use in public school classes than short stories?",
+          options: [
+            "Its deviated and figurative language necessitates a very long time to grasp",
+            "It is too long to read in one sitting",
+            "It has no known authors and cannot be graded",
+            "It contains only non-fiction facts"
+          ],
+          correctIndex: 0,
+          explanations: {
+            correct: "Page 3 states: 'the deviated and figurative language of poetry necessitates very long time to grasp.'",
+            distractors: [
+              "Poetry is generally short, making length objections incorrect (length is a novel objection).",
+              "Poetry does have known authors and can be graded.",
+              "Poetry is an artistic expression of feelings, not documented non-fiction facts."
+            ]
+          }
+        },
+        {
+          q: "How does a picture book cater to different learner intelligences in a classroom?",
+          options: [
+            "The richness of both content and illustrations allows teachers to cater to all learner types at their cognitive level",
+            "By forcing students to translate the illustrations into written GTM tasks",
+            "By excluding any verbal text so students only use nonverbal pointing",
+            "By restricting activities strictly to individual mathematical counting"
+          ],
+          correctIndex: 0,
+          explanations: {
+            correct: "Page 6 explains: 'the richness of storybooks in terms of their content and illustrations allow the teacher to cater for all learner types and to make learning experiences meaningful...'",
+            distractors: [
+              "GTM translation is a legacy task unrelated to catering to diverse intelligences.",
+              "Picture books include verbal text; they are not strictly wordless and do not exclude verbal text.",
+              "Maths is just one cross-curricular link, not the exclusive restricted activity."
+            ]
+          }
+        },
+        {
+          q: "How are 'The Kangaroo from Woolloomooloo' and 'The Clever Tortoise' related?",
+          options: [
+            "They are stories from other cultures that show different characteristics yet share similar themes of animal trickery",
+            "They are historical biographies written by 19th-century authors",
+            "They are science fiction novels focusing on futuristic space travel",
+            "They are contemporary realistic fiction stories set in North America"
+          ],
+          correctIndex: 0,
+          explanations: {
+            correct: "Page 7 explains: 'Stories from other cultures, such as The Kangaroo... and The Clever Tortoise show both how cultures are different... and have similar characteristics (e. g. stories about animal trickery).'",
+            distractors: [
+              "They are traditional storytelling fables, not historical biographies.",
+              "They do not belong to science fiction.",
+              "They are traditional/cultural stories, not contemporary realistic fiction."
+            ]
+          }
+        },
+        {
+          q: "Under active methodologies, how do 'Flipped Learning' and 'Flipped Classroom' approaches improve pacing?",
+          options: [
+            "By replacing a rigid time-based model with a mastery-based model, letting students progress when they show confidence",
+            "By keeping the entire class at the exact same pace regardless of individual gaps",
+            "By forcing all students to do their reading during active class hours",
+            "By completely eliminating teacher-student interaction and rubrics"
+          ],
+          correctIndex: 0,
+          explanations: {
+            correct: "Page 8 states Flipped classrooms allow: 'a mastery-based model... letting students decide when they are ready to continue... move forward only when they have shown they can apply what they learned.'",
+            distractors: [
+              "Moving the entire class at the same pace describes the rigid traditional time-based approach.",
+              "Reading is done at home in Flipped classrooms, not during active class hours.",
+              "Flipped classrooms optimize, rather than eliminate, active teacher-student interaction and feedback."
+            ]
+          }
+        },
+        {
+          q: "According to Duch et al. (2001), why must a group project PBL problem have a high level of complexity?",
+          options: [
+            "To ensure that students must work cooperatively to solve it",
+            "To ensure that individual students can complete it in under ten minutes in isolation",
+            "To force students to translate it word-for-word",
+            "To make it impossible for less proficient readers to engage"
+          ],
+          correctIndex: 0,
+          explanations: {
+            correct: "Page 9 states: 'the problem needs a level of complexity to ensure that the students must work together to solve it.'",
+            distractors: [
+              "Complexity prevents individual isolation, requiring team cooperation.",
+              "PBL does not use word-for-word translation.",
+              "The goal of complexity is cooperative learning, not excluding less proficient readers."
+            ]
+          }
+        },
+        {
+          q: "What is the main difference between 'direct service' and 'indirect service' in Service Learning?",
+          options: [
+            "Direct service involves face-to-face helping activities; indirect service involves behind-the-scenes actions like fundraising",
+            "Direct service is only for psychology courses; indirect service is only for maths",
+            "Direct service has no reflection phase; indirect service has multiple written rubrics",
+            "There is no difference; they are defined interchangeably"
+          ],
+          correctIndex: 0,
+          explanations: {
+            correct: "Page 10 states: 'Direct service includes tutoring, serving meals... [face-to-face]. Indirect service is doing something behind the scenes to help, such as organizing a fundraising event...'",
+            distractors: [
+              "Psychology courses often use direct service, but environmental studies and sociology use indirect, making this option too restrictive.",
+              "Both service learning models require reflection phases.",
+              "They are distinctly defined and categorized on Page 10 of the PDF."
+            ]
+          }
+        },
+        {
+          q: "How does the formula 'Once upon a time...' benefit foreign language learners?",
+          options: [
+            "It is a familiar narrative convention in their mother tongue, helping them make predictions about the text",
+            "It contains highly complex archaic grammar structures",
+            "It forces students to look up words in the dictionary",
+            "It represents a futuristic science fiction theme"
+          ],
+          correctIndex: 0,
+          explanations: {
+            correct: "Page 6 explains: 'Children enjoy listening to stories in their mother tongue and are familiar with narrative conventions... Once upon a time... they can make predictions about what to expect next.'",
+            distractors: [
+              "The formula is simple and supportive, not a highly complex grammatical barrier.",
+              "The formula reduces dictionary needs because predictions are made naturally.",
+              "The formula represents traditional literature, not futuristic science fiction."
+            ]
+          }
+        },
+        {
+          q: "How does the text describe the effect of good classroom communication by teachers?",
+          options: [
+            "It leads to better grades and retention, and closes the gap between privileged and disadvantaged students",
+            "It increases dropout rates among teenage immigrants",
+            "It prevents students from ever discovering grammar rules inductively",
+            "It replaces the need for any student-centered activities"
+          ],
+          correctIndex: 0,
+          explanations: {
+            correct: "Page 7 states: 'teachers who communicate better lead classes to better grades and retention rates... close the gap between privileged and disadvantaged students...'",
+            distractors: [
+              "Poor classroom communication is responsible for high dropout rates, not good communication.",
+              "Good communication encourages students to discover rules inductively.",
+              "Good communication supports and enhances active, student-centered activities."
+            ]
+          }
+        },
+        {
+          q: "What are the three teaching techniques used to distribute PBL problems?",
+          options: ["Case studies, role-plays, and simulations", "Deductive rules, drills, and translation keys", "Maths, science, and computing", "Direct, indirect, and advocacy work"],
+          correctIndex: 0,
+          explanations: {
+            correct: "Page 9 states: 'The method for distributing a PBL problem falls under three closely related teaching techniques: case studies, role-plays, and simulations.'",
+            distractors: [
+              "Deductive rules and drills are Phase 1 traditional methods.",
+              "Maths, science, and computing are cross-curricular links.",
+              "Direct, indirect, and advocacy are Service Learning categories."
+            ]
+          }
+        }
+      ],
+      hard: [
+        {
+          q: "A school district replaces all literary simplified texts with highly complex authentic historical novels for beginner EFL learners. According to the criteria of Ur (1996) and Hill (1994), what is the most likely consequence?",
+          options: [
+            "Students will experience high frustration, get bored, and stop reading due to inadequate linguistic levels and heavy background requirements",
+            "Students will acquire language at an accelerated child-like acquisition rate",
+            "Vocabulary and reading proficiency will improve dramatically within one single session",
+            "The students will automatically achieve high levels of self-confidence and motivation"
+          ],
+          correctIndex: 0,
+          explanations: {
+            correct: "Ur (1996) notes that authentic texts with less proficient readers are frustrating and counterproductive. Hill (1994) warns that inadequate vocabulary and complex sentences cause students to get bored and stop reading.",
+            distractors: [
+              "Language acquisition is stimulated by optimal input (i+1), not frustrating, over-complex authentic novels.",
+              "A single session cannot complete novel reading or resolve reading gaps.",
+              "Failure to read due to boredom decreases self-confidence and motivation."
+            ]
+          }
+        },
+        {
+          q: "An instructor claims that because GTM translation exercises and late 70s CLT speaking activities both ignored literary style, they represent the same paradigm. Critique this assertion.",
+          options: [
+            "GTM used translation of literary texts as its main activity, whereas late 70s CLT ignored literature to focus exclusively on oral dialogues and usable content",
+            "Both methods actually valued modern fantasy and picture books as core materials",
+            "CLT focused entirely on structural correctness, while GTM focused on communicative competence",
+            "The assertion is correct because neither method used active project-based Flipped classrooms"
+          ],
+          correctIndex: 0,
+          explanations: {
+            correct: "Page 2 clarifies that GTM used translation of literary texts as its main activity. Late 70s CLT ignored literature to teach 'usable, practical' oral dialogues.",
+            distractors: [
+              "Neither method valued picture books (ignored in both eras).",
+              "GTM focused on structural correctness; CLT focused on communicative competence, making this option the reverse of the facts.",
+              "Pacing methods do not justify declaring GTM and CLT identical paradigms."
+            ]
+          }
+        },
+        {
+          q: "A teacher reviews a child's short story writing performance immediately using a rubric and also annotates their draft. Which of Blaha's (2022) feedback principles are being combined here?",
+          options: [
+            "Providing written and verbal feedback, utilizing rubrics for specific elements, and giving almost immediate feedback",
+            "Acquiring deep cultural knowledge and avoiding all error correction",
+            "Combining Flipped learning with deductive GTM translation rules",
+            "Developing listening micro-skills through nonverbal drawing indicators"
+          ],
+          correctIndex: 0,
+          explanations: {
+            correct: "Blaha's feedback foundations include written and verbal forms (annotations and one-on-ones), specific element rubrics, and immediate delivery after the task.",
+            distractors: [
+              "Feedback is evaluative and does not avoid error correction; explanations are required.",
+              "Rubrics represent active feedback, not GTM translation rules.",
+              "Listening micro-skills do not govern written drafts and rubrics."
+            ]
+          }
+        },
+        {
+          q: "An ELL student who is highly expressive in drawings fails to answer verbal reading comprehension prompts in English. Analyze this situation under Krashen's (1990) acquisition principles.",
+          options: [
+            "The student's comprehension is developing before oral production, and nonverbal methods should be utilized temporarily to demonstrate understanding",
+            "The student is unmotivated and lacks the necessary passion trait",
+            "The student is experiencing lallation and cannot distinguish phonetic sounds",
+            "The student has completed academic CALP but lacks basic BICS skills"
+          ],
+          correctIndex: 0,
+          explanations: {
+            correct: "Page 5 notes: 'comprehension of language typically develops before the production... Nonverbal methods such as drawing... can be used by ELLs to demonstrate comprehension...'",
+            distractors: [
+              "Labeling a student as 'unmotivated' violates Strategy 3's view of dynamic motivation.",
+              "Lallation is a phonetic pronunciation challenge, not a receptive-to-productive comprehension gap.",
+              "If they fail reading prompts, they have not completed academic CALP."
+            ]
+          }
+        },
+        {
+          q: "Contrast the traditional time-based classroom model with the active Flipped classroom model regarding knowledge gaps.",
+          options: [
+            "Time-based models force the class to move together regardless of individual gaps; Flipped classrooms allow mastery-based models where students progress only when competent",
+            "Time-based models allow students to work at alert hours; Flipped models force a single uniform pace",
+            "Time-based models utilize rubrics; Flipped classrooms reject all assessments and evaluations",
+            "There is no difference; both models require all students to master grammar on the same day"
+          ],
+          correctIndex: 0,
+          explanations: {
+            correct: "Page 8 contrasts: 'time-based [means] the whole class moves at the same pace... regardless of their individual performance... The flipped classroom is flexible enough to allow the use of a mastery-based model...'",
+            distractors: [
+              "Flipped classrooms allow alert-hour study; time-based classrooms force a single uniform schedule.",
+              "Both models utilize assessments (e.g., rubrics are key to active feedback).",
+              "The models have distinct, contrasting pacing and performance philosophies."
+            ]
+          }
+        },
+        {
+          q: "If an EFL curriculum uses 'Princess Smartypants' to explore cause and effect, and 'Something Else' to teach tolerance, what educational values are being targeted?",
+          options: [
+            "Conceptual reinforcement (cause/effect) and Citizenship/Diversity education (tolerance/acceptance)",
+            "Traditional grammatical competence and GTM translation keys",
+            "Deductive structural rules and phonetic lallation correction",
+            "Direct Service Learning and Apple/Google design thinking workflows"
+          ],
+          correctIndex: 0,
+          explanations: {
+            correct: "Page 7 notes 'Princess Smartypants' is used for conceptual reinforcement (cause and effect). 'Something Else' focus on sameness/difference to develop tolerance (Citizenship/Diversity).",
+            distractors: [
+              "These stories are literary books used in active CLT, not GTM translation drills.",
+              "Tolerance and cause-effect represent social/cognitive concepts, not deductive structural rules.",
+              "Neither story is associated with Service Learning or corporate Design Thinking workflows."
+            ]
+          }
+        },
+        {
+          q: "How does the integration of research, development, and evaluative activities in Design Thinking benefit complicated or trans-disciplinary topics?",
+          options: [
+            "It promotes the search for many creative options through discovery, ideation, and rapid prototyping rather than a single right answer",
+            "It forces students to complete translation activities in under two hours",
+            "It requires students to memorize tenses and lists before writing essays",
+            "It limits students strictly to traditional time-based methods in public schools"
+          ],
+          correctIndex: 0,
+          explanations: {
+            correct: "Page 7 states: 'Design thinking... fits within the real-world of complicated problems because it promotes the search for many possible options, not a single right answer... using discovery, ideation...'",
+            distractors: [
+              "Translation is not part of Design Thinking.",
+              "Memorizing tenses is a legacy traditional approach.",
+              "Design Thinking is part of project-based active learning, not traditional time-based limits."
+            ]
+          }
+        },
+        {
+          q: "Why does the text argue that viewing student motivation as a fixed personality trait is incorrect for instructors?",
+          options: [
+            "Because motivation is dynamic, fluctuates, and instructors are the most important factor in actively influencing student motivation levels",
+            "Because motivation is purely genetic and cannot be modified by teachers",
+            "Because only introverted students can achieve long-term goals without motivation",
+            "Because motivation remains high naturally without any input or interaction"
+          ],
+          correctIndex: 0,
+          explanations: {
+            correct: "Page 7 states: 'The idea that student motivation is a personality trait... is incorrect... as instructors, we may be the most important factor in influencing our students' motivation...'",
+            distractors: [
+              "The text rejects the genetic, unchangeable motivation view.",
+              "Motivation is needed for all students to achieve long-term goals.",
+              "Motivation fluctuates and requires active quality input to remain high."
+            ]
+          }
+        },
+        {
+          q: "An EFL student can speak fluently about daily events but struggles with written academic synthesis tasks. Under the BICS and CALP framework, diagnose the student's learning state.",
+          options: [
+            "The student has acquired conversational BICS (takes 2 years) but has not yet mastered academic CALP (takes 7 years), representing second-language literacy needs",
+            "The student has completed CALP but lacks basic interpersonal communication skills",
+            "The student suffers from phonetic lallation and requires immediate oral reading drills",
+            "The student is unmotivated and lacks personal goals and expectations"
+          ],
+          correctIndex: 0,
+          explanations: {
+            correct: "Conversational language (BICS) takes 2 years, whereas classroom academic language (CALP) takes 7 years. Proficiency in speaking but failing reading/writing is defined as second-language literacy needs (Page 3).",
+            distractors: [
+              "If they struggle with written synthesis, they have not completed CALP.",
+              "Lallation is an oral pronunciation challenge, not a written academic synthesis failure.",
+              "This represents a natural developmental gap, not necessarily a lack of motivation."
+            ]
+          }
+        },
+        {
+          q: "A teacher corrects all errors on a story writing draft but does not explain the corrections, causing the student to feel discouraged. Analyze this under Strategy 3 (Accomplishment).",
+          options: [
+            "The teacher violated Strategy 3 by correcting mistakes without giving clear explanations, which harms student self-confidence and appreciation",
+            "The teacher acted correctly because explaining errors is counterproductive for less proficient readers",
+            "The teacher should have used nonverbal pointing to avoid spelling corrections entirely",
+            "The student has non-self-determined intrinsic motivation which causes anxiety"
+          ],
+          correctIndex: 0,
+          explanations: {
+            correct: "Page 7 states: 'giving positive feedback should not be mistaken for correcting mistakes without giving explanations... very important for teachers to point out good aspects... and provide clear explanations...'",
+            distractors: [
+              "Failing to explain is explicitly warned against in Strategy 3.",
+              "Nonverbal pointing is a Krashen comprehension method, not a written draft correction technique.",
+              "Intrinsic motivation is always self-determined; 'non-self-determined intrinsic' is a contradictory term."
+            ]
+          }
+        },
+        {
+          q: "Why are short stories structurally superior to novels or drama for public schools with limited time and crowded rooms?",
+          options: [
+            "Their short length allows them to be covered in one sitting, with a single plot, few characters, and no detailed setting descriptions",
+            "They do not contain any grammatical structures or vocabulary challenges",
+            "They must be translated word-for-word, which saves course hours",
+            "They completely eliminate the need for student-centered activities"
+          ],
+          correctIndex: 0,
+          explanations: {
+            correct: "Page 4 explains: 'short story... narrative read at one sitting... one plot, a few characters; there is no detailed description of setting. So, it is easy for learners to follow...'",
+            distractors: [
+              "Short stories contain rich grammatical structures and vocabulary.",
+              "Translation is GTM, which does not save time compared to short story sessions.",
+              "Short stories enhance student-centered activities (speaking, roleplay)."
+            ]
+          }
+        },
+        {
+          q: "What is the relationship between 'world Englishes' and the selection of stories from children's literature?",
+          options: [
+            "Selected stories expose children to various varieties of English spoken around the world and help them discover other cultures",
+            "Stories force students to only learn traditional British English tenses",
+            "Stories prevent students from understanding different cultural perspectives",
+            "There is no relationship; world Englishes is restricted to business classes"
+          ],
+          correctIndex: 0,
+          explanations: {
+            correct: "Page 6 states: 'Carefully selected stories... provide a ceaseless source of material to expose children to varieties of English as spoken around the world and to discover other cultures.'",
+            distractors: [
+              "Stories cover multiple dialects (e.g., Australia/Woolloomooloo), not just British.",
+              "Stories support, rather than prevent, intercultural understanding.",
+              "World Englishes is actively integrated into primary EFL storybooks."
+            ]
+          }
+        },
+        {
+          q: "How does the technique of storytelling help children become aware of phonetics and language rhythms?",
+          options: [
+            "By exposing them to language in varied, memorable contexts where they hear rhythm, intonation, and pronunciation",
+            "By forcing them to perform rote drills of individual phonetic sounds",
+            "By requiring them to translate texts silently into their mother tongue",
+            "By restricting language input strictly to nonverbal visual clues"
+          ],
+          correctIndex: 0,
+          explanations: {
+            correct: "Page 6 notes: 'Listening to stories helps children become aware of the rhythm, intonation and pronunciation of language.'",
+            distractors: [
+              "Rote drills are traditional methods, not storytelling acquisition.",
+              "Silent GTM translation does not support oral rhythm awareness.",
+              "Storytelling combines visual, auditory, and verbal input, and is not restricted to visual clues."
+            ]
+          }
+        },
+        {
+          q: "How does the text define the cycle of Service Learning?",
+          options: [
+            "A cycle of classroom theories, volunteer practices, and reflection tools to broaden knowledge and critical thinking for social change",
+            "A rotation of GTM translation worksheets and structural P-P-P cycles",
+            "An iterative process of Discovery, Ideation, Experimentation, and Evolution",
+            "A time-based approach where all students volunteer on the same day"
+          ],
+          correctIndex: 0,
+          explanations: {
+            correct: "Page 9 defines it as: 'a cycle of theories, practices, and reflection tools to broaden knowledge and critical thinking skills for social change.'",
+            distractors: [
+              "P-P-P cycles represent Phase 1 traditional methods.",
+              "Iterative stages describe Design Thinking, not Service Learning.",
+              "Service Learning is an active methodology, not a time-based rigid model."
+            ]
+          }
+        },
+        {
+          q: "A teacher allows an ELL student to write down their thoughts in their native language first during a story-writing project. Why is this valid under responsive teaching?",
+          options: [
+            "It allows them to focus on the concept first, then learn the target language, rather than learning both at the same time",
+            "It prevents the student from ever needing to acquire English writing skills",
+            "It is a form of GTM translation which is highly recommended for advanced learners",
+            "It is an explicit advocacy work strategy that challenges class placement"
+          ],
+          correctIndex: 0,
+          explanations: {
+            correct: "Page 6 practices state: 'Allow ELLs to use their first language when learning new concepts. This allows them to understand the concept, then learn the concept language, rather than learning both at the same time.'",
+            distractors: [
+              "The ultimate goal remains English writing proficiency.",
+              "This is a temporary responsive learning support, not a GTM translation exercise.",
+              "It is a language acquisition support, not political advocacy work."
+            ]
+          }
+        }
+      ]
+    };
+  </script>
+
+  <!-- INTERACTIVE LOGIC & ACCESSIBILITY CONTROLLER -->
+  <script>
+    // CONTROLADOR DE NAVEGACIÓN ENTRE SECCIONES
+    function switchTab(tabId) {
+      state.activeTab = tabId;
+      
+      // Actualizar visibilidad en la interfaz
+      ['dashboard', 'study', 'flashcards', 'test'].forEach(tab => {
+        const section = document.getElementById(`tab-${tab}`);
+        const navBtn = document.getElementById(`nav-${tab}`);
+        
+        if (tab === tabId) {
+          section.classList.remove('hidden');
+          navBtn.classList.add('bg-slate-800', 'text-white', 'font-semibold');
+          navBtn.classList.remove('text-slate-300');
+        } else {
+          section.classList.add('hidden');
+          navBtn.classList.remove('bg-slate-800', 'text-white', 'font-semibold');
+          navBtn.classList.add('text-slate-300');
+        }
+      });
+
+      stopSpeech();
+
+      // Renderizados específicos por pestaña
+      if (tabId === 'dashboard') {
+        renderDashboard();
+      } else if (tabId === 'flashcards') {
+        renderFlashcard();
+      } else if (tabId === 'test') {
+        renderQuizQuestion();
+      }
+    }
+
+    // AJUSTES DE ACCESIBILIDAD
+    function adjustFontSize(sizeValue) {
+      state.settings.fontSize = sizeValue;
+      document.documentElement.style.setProperty('--app-font-size', sizeValue);
+    }
+
+    function changeTheme(themeValue) {
+      state.settings.theme = themeValue;
+      const body = document.body;
+      
+      body.className = "bg-slate-50 text-slate-900 min-h-screen flex flex-col transition-all duration-200";
+      
+      if (themeValue === 'dark') {
+        body.classList.add('bg-slate-950', 'text-slate-100');
+        document.querySelectorAll('.card-bg').forEach(card => {
+          card.classList.add('bg-slate-900', 'border-slate-800', 'text-slate-100');
+        });
+      } else if (themeValue === 'high-contrast') {
+        body.classList.add('theme-high-contrast');
+      } else if (themeValue === 'pastel') {
+        body.classList.add('theme-pastel');
+      }
+
+      if (state.settings.dyslexicFont) {
+        body.classList.add('dyslexic-mode');
+      }
+    }
+
+    function toggleDyslexicFont() {
+      state.settings.dyslexicFont = !state.settings.dyslexicFont;
+      const body = document.body;
+      const statusBtnText = document.getElementById('dyslexic-status');
+      
+      if (state.settings.dyslexicFont) {
+        body.classList.add('dyslexic-mode');
+        statusBtnText.innerText = "Dislexia: Sí";
+      } else {
+        body.classList.remove('dyslexic-mode');
+        statusBtnText.innerText = "Dislexia: No";
+      }
+    }
+
+    function toggleFocusMode() {
+      state.settings.focusMode = !state.settings.focusMode;
+      const sidebar = document.getElementById('app-sidebar');
+      const focusBtnText = document.getElementById('focus-status');
+      
+      if (state.settings.focusMode) {
+        sidebar.classList.add('hidden');
+        focusBtnText.innerText = "Modo Enfoque: Sí";
+      } else {
+        sidebar.classList.remove('hidden');
+        focusBtnText.innerText = "Modo Enfoque: No";
+      }
+    }
+
+    // MANEJO DE SECCIONES COLLAPSIBLES DE LECTURA
+    function toggleSectionCollapse(sectionBodyId) {
+      const sectionBody = document.getElementById(sectionBodyId);
+      const chevron = document.getElementById(sectionBodyId.replace('-body', '-chevron'));
+      
+      if (sectionBody.classList.contains('hidden')) {
+        sectionBody.classList.remove('hidden');
+        chevron.classList.remove('-rotate-90');
+      } else {
+        sectionBody.classList.add('hidden');
+        chevron.classList.add('-rotate-90');
+      }
+    }
+
+    function collapseAllSections() {
+      ['sec-3.1-body', 'sec-3.2-body', 'sec-3.3-body'].forEach(id => {
+        document.getElementById(id).classList.add('hidden');
+        document.getElementById(id.replace('-body', '-chevron')).classList.add('-rotate-90');
+      });
+    }
+
+    function expandAllSections() {
+      ['sec-3.1-body', 'sec-3.2-body', 'sec-3.3-body'].forEach(id => {
+        document.getElementById(id).classList.remove('hidden');
+        document.getElementById(id.replace('-body', '-chevron')).classList.remove('-rotate-90');
+      });
+    }
+
+    function toggleReadProgress(sectionKey, isChecked) {
+      state.readingProgress[sectionKey] = isChecked;
+      renderDashboard();
+    }
+
+    // MARCADORES FAVORITOS
+    function toggleBookmark(sectionId) {
+      const index = state.bookmarks.indexOf(sectionId);
+      const btn = document.getElementById(`bookmark-${sectionId}`);
+      
+      if (index === -1) {
+        state.bookmarks.push(sectionId);
+        btn.classList.add('text-amber-500');
+        btn.classList.remove('text-slate-400');
+      } else {
+        state.bookmarks.splice(index, 1);
+        btn.classList.add('text-slate-400');
+        btn.classList.remove('text-amber-500');
+      }
+      
+      if (state.filterBookmarkedOnly) {
+        applyBookmarkFilter();
+      }
+    }
+
+    function toggleFilterBookmarked() {
+      state.filterBookmarkedOnly = !state.filterBookmarkedOnly;
+      const btn = document.getElementById('btn-filter-bookmark');
+      
+      if (state.filterBookmarkedOnly) {
+        btn.classList.add('bg-amber-100', 'text-amber-850', 'border-amber-300');
+        applyBookmarkFilter();
+      } else {
+        btn.classList.remove('bg-amber-100', 'text-amber-850', 'border-amber-300');
+        document.getElementById('sec-3.1').classList.remove('hidden');
+        document.getElementById('sec-3.2').classList.remove('hidden');
+        document.getElementById('sec-3.3').classList.remove('hidden');
+      }
+    }
+
+    function applyBookmarkFilter() {
+      ['sec-3.1', 'sec-3.2', 'sec-3.3'].forEach(secId => {
+        const el = document.getElementById(secId);
+        if (state.bookmarks.includes(secId)) {
+          el.classList.remove('hidden');
+        } else {
+          el.classList.add('hidden');
+        }
+      });
+    }
+
+    // BUSCADORES LOCALES Y GLOBALES
+    function searchSyllabus(query) {
+      const term = query.toLowerCase().trim();
+      const articles = ['sec-3.1', 'sec-3.2', 'sec-3.3'];
+      
+      articles.forEach(artId => {
+        const articleEl = document.getElementById(artId);
+        const textContent = articleEl.innerText.toLowerCase();
+        
+        if (term === "" || textContent.includes(term)) {
+          articleEl.classList.remove('hidden');
+        } else {
+          articleEl.classList.add('hidden');
+        }
+      });
+    }
+
+    function handleGlobalSearch(query) {
+      const term = query.toLowerCase().trim();
+      const popup = document.getElementById('search-results-popup');
+      
+      if (term === "") {
+        popup.classList.add('hidden');
+        popup.innerHTML = "";
+        return;
+      }
+      
+      let results = [];
+
+      // Evaluar silabo original
+      if ("children's literature definition genres realistic fiction traditional fantasy history".includes(term)) {
+        results.push({ type: 'Lectura', label: 'Sec 3.1: Children\'s Literature', action: "switchTab('study'); toggleSectionCollapse('sec-3.1-body')" });
+      }
+      if ("short stories selection criteria hill ur spack language skills development reading writing speaking listening".includes(term)) {
+        results.push({ type: 'Lectura', label: 'Sec 3.2: Short Stories Criteria', action: "switchTab('study'); toggleSectionCollapse('sec-3.2-body')" });
+      }
+      if ("storybooks storytelling handbooks reasons learning cross-curricular learning to learn citizenship diversity".includes(term)) {
+        results.push({ type: 'Lectura', label: 'Sec 3.3: Storybooks & Storytelling', action: "switchTab('study'); toggleSectionCollapse('sec-3.3-body')" });
+      }
+
+      // Evaluar flashcards
+      state.flashcards.forEach((card, idx) => {
+        if (card.front.toLowerCase().includes(term) || card.back.toLowerCase().includes(term)) {
+          results.push({ type: 'Tarjeta', label: `Card: ${card.front}`, action: `switchTab('flashcards'); state.currentCardIndex = ${idx}; renderFlashcard();` });
+        }
+      });
+
+      // Pintar popup
+      if (results.length > 0) {
+        popup.classList.remove('hidden');
+        popup.innerHTML = results.slice(0, 5).map(res => `
+          <div onclick="${res.action}; document.getElementById('global-search').value='';" class="p-2 hover:bg-teal-700 hover:text-white rounded cursor-pointer border-b border-slate-700 last:border-0 transition-colors">
+            <span class="font-bold text-[10px] uppercase bg-teal-900 text-teal-300 px-1 py-0.5 rounded mr-1">${res.type}</span>
+            <span>${res.label.substring(0, 45)}${res.label.length > 45 ? '...' : ''}</span>
+          </div>
+        `).join('');
+      } else {
+        popup.classList.remove('hidden');
+        popup.innerHTML = `<div class="p-2 text-slate-500">Sin coincidencia de silabo.</div>`;
+      }
+    }
+
+    // MOTOR DINÁMICO DE TARJETAS DE MEMORIZACIÓN (FLASHCARDS)
+    function getFilteredCards() {
+      if (state.activeCardFilter === 'learned') {
+        return state.flashcards.filter(c => c.learned);
+      }
+      if (state.activeCardFilter === 'difficult') {
+        return state.flashcards.filter(c => c.difficult);
+      }
+      if (state.activeCardFilter === 'remaining') {
+        return state.flashcards.filter(c => !c.learned);
+      }
+      return state.flashcards;
+    }
+
+    function renderFlashcard() {
+      const list = getFilteredCards();
+      const cardEl = document.getElementById('flashcard');
+      const counterEl = document.getElementById('card-counter');
+      
+      cardEl.classList.remove('flashcard-flipped');
+      state.isCardFlipped = false;
+
+      if (list.length === 0) {
+        document.getElementById('card-badge').innerText = "Vacío";
+        document.getElementById('card-front-text').innerText = "No hay tarjetas con este filtro.";
+        document.getElementById('card-back-text').innerText = "Modifica los filtros de estado arriba.";
+        counterEl.innerText = "0 de 0";
+        return;
+      }
+
+      if (state.currentCardIndex >= list.length) {
+        state.currentCardIndex = 0;
+      }
+
+      const activeCard = list[state.currentCardIndex];
+      
+      document.getElementById('card-badge').innerText = activeCard.badge;
+      document.getElementById('card-front-text').innerText = activeCard.front;
+      document.getElementById('card-back-text').innerText = activeCard.back;
+      
+      counterEl.innerText = `Tarjeta ${state.currentCardIndex + 1} de ${list.length}`;
+    }
+
+    // Volteado interactivo
+    function flipFlashcard() {
+      const cardEl = document.getElementById('flashcard');
+      state.isCardFlipped = !state.isCardFlipped;
+      if (state.isCardFlipped) {
+        cardEl.classList.add('flashcard-flipped');
+      } else {
+        cardEl.classList.remove('flashcard-flipped');
+      }
+    }
+
+    function nextFlashcard() {
+      const list = getFilteredCards();
+      if (list.length === 0) return;
+      state.currentCardIndex = (state.currentCardIndex + 1) % list.length;
+      renderFlashcard();
+    }
+
+    function prevFlashcard() {
+      const list = getFilteredCards();
+      if (list.length === 0) return;
+      state.currentCardIndex = (state.currentCardIndex - 1 + list.length) % list.length;
+      renderFlashcard();
+    }
+
+    function markCardDifficult(event) {
+      event.stopPropagation();
+      const list = getFilteredCards();
+      if (list.length === 0) return;
+      
+      const card = list[state.currentCardIndex];
+      card.difficult = true;
+      card.learned = false;
+      
+      showToast(`Marcada como 'Difícil'`);
+      nextFlashcard();
+      renderDashboard();
+    }
+
+    function markCardLearned(event) {
+      event.stopPropagation();
+      const list = getFilteredCards();
+      if (list.length === 0) return;
+      
+      const card = list[state.currentCardIndex];
+      card.learned = true;
+      card.difficult = false;
+      
+      showToast(`Marcada como 'Dominada'`);
+      nextFlashcard();
+      renderDashboard();
+    }
+
+    function filterCards(filterType) {
+      state.activeCardFilter = filterType;
+      state.currentCardIndex = 0;
+      
+      ['all', 'remaining', 'difficult', 'learned'].forEach(type => {
+        const btn = document.getElementById(`card-btn-${type}`);
+        if (type === filterType) {
+          btn.className = "bg-teal-600 text-white px-3 py-1.5 rounded-lg text-xs font-bold";
+        } else {
+          btn.className = "bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-1.5 rounded-lg text-xs font-bold card-bg";
+        }
+      });
+
+      renderFlashcard();
+    }
+
+    function shuffleCards() {
+      state.flashcards.sort(() => Math.random() - 0.5);
+      state.currentCardIndex = 0;
+      renderFlashcard();
+      showToast("¡Tarjetas mezcladas!");
+    }
+
+    // MOTOR DEL EXAMEN DIAGNÓSTICO (QUIZ)
+    function switchTestLevel(level) {
+      state.testLevel = level;
+      state.currentQuestionIndex = 0;
+      
+      ['easy', 'medium', 'hard'].forEach(lvl => {
+        const btn = document.getElementById(`btn-lvl-${lvl}`);
+        if (lvl === level) {
+          btn.className = "px-4 py-2 rounded-lg bg-white text-slate-900 shadow font-bold";
+        } else {
+          btn.className = "px-4 py-2 rounded-lg text-slate-500 hover:text-slate-700 font-bold";
+        }
+      });
+
+      document.getElementById('quiz-container').classList.remove('hidden');
+      document.getElementById('quiz-summary-panel').classList.add('hidden');
+
+      renderQuizQuestion();
+    }
+
+    function renderQuizQuestion() {
+      const levelQuestions = quizData[state.testLevel];
+      const activeQuestion = levelQuestions[state.currentQuestionIndex];
+      
+      document.getElementById('quiz-level-indicator').innerText = `${state.testLevel.toUpperCase()} LEVEL (UNIDAD 4)`;
+      document.getElementById('quiz-title-indicator').innerText = `Pregunta ${state.currentQuestionIndex + 1} de 15`;
+      document.getElementById('quiz-question-text').innerText = activeQuestion.q;
+      
+      const percent = ((state.currentQuestionIndex + 1) / 15) * 100;
+      document.getElementById('quiz-progress-bar').style.width = `${percent}%`;
+
+      const optionsBox = document.getElementById('quiz-options-box');
+      optionsBox.innerHTML = "";
+      
+      const savedAnswer = state.userAnswers[state.testLevel][state.currentQuestionIndex];
+      const isChecked = state.quizAnswersChecked[state.testLevel][state.currentQuestionIndex];
+
+      activeQuestion.options.forEach((opt, idx) => {
+        const optionLetter = String.fromCharCode(65 + idx); // A, B, C, D
+        let optionClass = "flex items-center gap-3 p-4 rounded-xl border text-left font-medium transition-all cursor-pointer card-bg ";
+        
+        if (savedAnswer === idx) {
+          optionClass += "border-teal-600 bg-teal-50 text-teal-900 ring-2 ring-teal-600 ";
+        } else {
+          optionClass += "border-slate-200 hover:border-slate-300 hover:bg-slate-50 ";
+        }
+
+        optionsBox.innerHTML += `
+          <button onclick="selectQuizOption(${idx})" ${isChecked ? 'disabled' : ''} class="w-full ${optionClass}">
+            <span class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-bold text-sm border card-bg text-teal-700">${optionLetter}</span>
+            <span class="flex-1">${opt}</span>
+          </button>
+        `;
+      });
+
+      const feedbackBox = document.getElementById('quiz-feedback-box');
+      const submitBtn = document.getElementById('btn-submit-answer');
+
+      if (isChecked) {
+        feedbackBox.classList.remove('hidden');
+        renderQuizFeedback(activeQuestion, savedAnswer);
+        submitBtn.innerText = "Siguiente Pregunta";
+      } else {
+        feedbackBox.classList.add('hidden');
+        submitBtn.innerText = "Validar Respuesta";
+      }
+    }
+
+    function selectQuizOption(optionIdx) {
+      state.userAnswers[state.testLevel][optionIdx] = optionIdx; // Safeguard
+      state.userAnswers[state.testLevel][state.currentQuestionIndex] = optionIdx;
+      renderQuizQuestion();
+    }
+
+    function submitQuizAnswer() {
+      const savedAnswer = state.userAnswers[state.testLevel][state.currentQuestionIndex];
+      const isChecked = state.quizAnswersChecked[state.testLevel][state.currentQuestionIndex];
+
+      if (savedAnswer === null) {
+        showToast("Escoge una de las respuestas para poder continuar.");
+        return;
+      }
+
+      if (isChecked) {
+        if (state.currentQuestionIndex < 14) {
+          state.currentQuestionIndex++;
+          renderQuizQuestion();
+        } else {
+          renderLevelSummary();
+        }
+      } else {
+        state.quizAnswersChecked[state.testLevel][state.currentQuestionIndex] = true;
+        renderQuizQuestion();
+        renderDashboard(); 
+      }
+    }
+
+    function renderQuizFeedback(question, userAnswerIdx) {
+      const feedbackBox = document.getElementById('quiz-feedback-box');
+      const isCorrect = (userAnswerIdx === question.correctIndex);
+      
+      feedbackBox.className = `p-5 rounded-2xl border transition-all ${isCorrect ? 'bg-emerald-50 border-emerald-200 text-emerald-900 card-bg' : 'bg-red-50 border-red-200 text-red-900 card-bg'}`;
+      
+      let html = `
+        <div class="flex items-center gap-2 mb-3">
+          <i data-lucide="${isCorrect ? 'check-circle' : 'alert-triangle'}" class="${isCorrect ? 'text-emerald-600' : 'text-red-600'} w-6 h-6"></i>
+          <span class="font-extrabold text-base">${isCorrect ? '¡Afirmación Correcta!' : 'Opción Incorrecta'}</span>
+        </div>
+        <p class="text-sm font-semibold mb-2">Respuesta Correcta: <span class="underline">${question.options[question.correctIndex]}</span></p>
+        <p class="text-sm mb-4"><strong>Syllabus Proof (PDF):</strong> ${question.explanations.correct}</p>
+        
+        <div class="border-t border-slate-200 pt-3 space-y-2 text-xs">
+          <span class="font-bold text-slate-500 uppercase tracking-wider block">Análisis Opciones:</span>
+      `;
+
+      question.options.forEach((opt, idx) => {
+        const isOptCorrect = (idx === question.correctIndex);
+        const explText = isOptCorrect ? "Esta afirmación se encuentra literalmente sustentada en el documento oficial." : question.explanations.distractors[idx > question.correctIndex ? idx - 1 : idx];
+        
+        html += `
+          <div><strong>Opción ${String.fromCharCode(65 + idx)}:</strong> ${explText}</div>
+        `;
+      });
+
+      html += `</div>`;
+      feedbackBox.innerHTML = html;
+      
+      lucide.createIcons();
+    }
+
+    function renderLevelSummary() {
+      document.getElementById('quiz-container').classList.add('hidden');
+      const summary = document.getElementById('quiz-summary-panel');
+      summary.classList.remove('hidden');
+
+      const levelQuestions = quizData[state.testLevel];
+      let correctCount = 0;
+      
+      levelQuestions.forEach((q, idx) => {
+        if (state.userAnswers[state.testLevel][idx] === q.correctIndex) {
+          correctCount++;
+        }
+      });
+
+      const accuracyPercent = Math.round((correctCount / 15) * 100);
+
+      document.getElementById('quiz-summary-score').innerText = `${correctCount} / 15`;
+      document.getElementById('quiz-summary-percent').innerText = `${accuracyPercent}%`;
+      document.getElementById('quiz-summary-subtitle').innerText = `Has terminado con éxito el nivel ${state.testLevel} de la Unidad 4.`;
+
+      renderDashboard();
+    }
+
+    function restartTestLevel() {
+      state.userAnswers[state.testLevel] = Array(15).fill(null);
+      state.quizAnswersChecked[state.testLevel] = Array(15).fill(false);
+      switchTestLevel(state.testLevel);
+    }
+
+    function resetCurrentQuiz() {
+      if (confirm("¿Estás seguro de que quieres restablecer todas tus respuestas de este nivel?")) {
+        restartTestLevel();
+      }
+    }
+
+    function advanceNextQuizLevel() {
+      if (state.testLevel === 'easy') {
+        switchTestLevel('medium');
+      } else if (state.testLevel === 'medium') {
+        switchTestLevel('hard');
+      } else {
+        showToast("¡Felicidades! Has completado el total de niveles diagnósticos.");
+        switchTab('dashboard');
+      }
+    }
+
+    // REGISTRO DE PANEL DE CONTROL (DASHBOARD)
+    function renderDashboard() {
+      // 1. Lectura del silabo leído
+      let readCount = 0;
+      if (state.readingProgress.sec31) readCount++;
+      if (state.readingProgress.sec32) readCount++;
+      if (state.readingProgress.sec33) readCount++;
+      
+      const readingPercent = Math.round((readCount / 3) * 100);
+      document.getElementById('dash-reading-progress').innerText = `${readingPercent}%`;
+      document.getElementById('dash-reading-detail').innerText = `${readCount} de 3 secciones leídas`;
+
+      // 2. Tarjetas memorizadas
+      const learnedCount = state.flashcards.filter(c => c.learned).length;
+      const flashcardsPercent = Math.round((learnedCount / 40) * 100);
+      document.getElementById('dash-cards-progress').innerText = `${flashcardsPercent}%`;
+      document.getElementById('dash-cards-detail').innerText = `${learnedCount} de 40 dominadas`;
+
+      // 3. Quizzes y efectividad
+      let completedQuizzes = 0;
+      let totalScorePercent = 0;
+      
+      ['easy', 'medium', 'hard'].forEach(lvl => {
+        const isLvlChecked = state.quizAnswersChecked[lvl].every(item => item === true);
+        if (isLvlChecked) {
+          completedQuizzes++;
+          let correct = 0;
+          quizData[lvl].forEach((q, idx) => {
+            if (state.userAnswers[lvl][idx] === q.correctIndex) correct++;
+          });
+          totalScorePercent += (correct / 15) * 100;
+        }
+      });
+
+      const avgScore = completedQuizzes > 0 ? Math.round(totalScorePercent / completedQuizzes) : 0;
+      document.getElementById('dash-quizzes-completed').innerText = `${completedQuizzes} / 3`;
+      document.getElementById('dash-average-score').innerText = `${avgScore}%`;
+
+      // 4. Progreso Global
+      const overallMastery = Math.round((readingPercent * 0.3) + (flashcardsPercent * 0.3) + (avgScore * 0.4));
+      document.getElementById('dash-total-percentage').innerText = `${overallMastery}% Completado`;
+      document.getElementById('dash-total-progressbar').style.width = `${overallMastery}%`;
+    }
+
+    // TOASTS DE NOTIFICACIÓN ACCESIBLES
+    function showToast(msg) {
+      const toast = document.createElement('div');
+      toast.className = "fixed bottom-5 right-5 bg-teal-900 text-white font-semibold py-3 px-6 rounded-2xl shadow-xl z-50 text-sm animate-bounce";
+      toast.innerText = msg;
+      document.body.appendChild(toast);
+      setTimeout(() => {
+        toast.remove();
+      }, 3000);
+    }
+  </script>
+
+  <!-- INICIALIZACIÓN FINAL -->
+  <script>
+    window.onload = function() {
+      // Iniciar iconos lucide
+      lucide.createIcons();
+      // Inicializar Panel de Control
+      renderDashboard();
+    }
+  </script>
+</body>
+</html>
